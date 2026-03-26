@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spotted — Dublin</title>
+<title>Spotted!</title>
 <link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -16,29 +16,126 @@
     --off:    #f7f4ef;
     --card:   #ffffff;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
   body {
     min-height: 100vh;
     font-family: 'Nunito', sans-serif;
     display: flex; flex-direction: column; align-items: center;
     padding-bottom: 80px;
-    /* halftone dot background */
     background-color: var(--off);
     background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1.2px, transparent 1.2px);
     background-size: 14px 14px;
   }
 
-  /* ── HEADER ──────────────────────────────── */
+  /* ══════════════════════════════════════
+     HOME SCREEN
+  ══════════════════════════════════════ */
+  #homeScreen {
+    width: 100%; max-width: 480px;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 0 0 40px;
+  }
+  .home-header {
+    width: 100%;
+    background: var(--red);
+    padding: 28px 20px 24px;
+    border-bottom: 4px solid var(--ink);
+    text-align: center;
+    background-image:
+      radial-gradient(circle, rgba(0,0,0,0.12) 1px, transparent 1px),
+      linear-gradient(var(--red), var(--red));
+    background-size: 8px 8px, 100% 100%;
+  }
+  .home-logo {
+    font-family: 'Paytone One', sans-serif;
+    font-size: 3.8rem; color: var(--yellow); line-height: 1;
+    text-shadow: 4px 4px 0 var(--ink);
+    letter-spacing: 2px;
+  }
+  .home-tagline {
+    font-size: 0.95rem; font-weight: 900; color: rgba(255,255,255,0.85);
+    margin-top: 8px; letter-spacing: 0.5px;
+  }
+  .home-choose {
+    font-family: 'Paytone One', sans-serif;
+    font-size: 1.5rem; color: var(--ink);
+    padding: 24px 20px 12px;
+    letter-spacing: 0.5px;
+  }
+  .city-cards { width: 100%; padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
+  .city-card {
+    background: var(--card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 5px 5px 0 var(--ink);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    position: relative;
+  }
+  .city-card:active { transform: translate(2px,2px); box-shadow: 3px 3px 0 var(--ink); }
+  .city-card-band {
+    padding: 18px 20px 16px;
+    border-bottom: 3px solid var(--ink);
+    position: relative; overflow: hidden;
+    background-image: radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px);
+    background-size: 9px 9px;
+  }
+  .city-card-flag { font-size: 2.2rem; margin-bottom: 6px; display: block; }
+  .city-card-name {
+    font-family: 'Paytone One', sans-serif;
+    font-size: 1.9rem; color: var(--white);
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.25); line-height: 1;
+  }
+  .city-card-clues {
+    font-size: 0.78rem; font-weight: 900; color: rgba(255,255,255,0.7);
+    margin-top: 4px; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .city-card-body { padding: 14px 20px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .city-card-desc { font-size: 0.88rem; font-weight: 800; color: #555; line-height: 1.4; flex: 1; }
+  .city-card-arrow {
+    font-family: 'Paytone One', sans-serif;
+    font-size: 1.4rem; color: var(--ink);
+    background: var(--yellow);
+    border: 2.5px solid var(--ink);
+    border-radius: 8px;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 3px 3px 0 var(--ink);
+    flex-shrink: 0; margin-left: 14px;
+  }
+  .city-progress-row {
+    padding: 0 20px 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .city-prog-track {
+    flex: 1; height: 10px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 3px; overflow: hidden;
+    border: 2px solid var(--ink);
+  }
+  .city-prog-fill {
+    height: 100%; background: var(--green);
+    border-radius: 2px; transition: width 0.4s;
+  }
+  .city-prog-label {
+    font-size: 0.72rem; font-weight: 900; color: #888;
+    text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;
+  }
+
+  /* ══════════════════════════════════════
+     GAME SCREEN
+  ══════════════════════════════════════ */
+  #gameScreen { display: none; width: 100%; flex-direction: column; align-items: center; }
+
+  /* HEADER */
   .header {
     width: 100%; max-width: 480px;
     background: var(--red);
-    padding: 16px 20px 14px;
+    padding: 14px 20px 12px;
     position: sticky; top: 0; z-index: 100;
     border-bottom: 4px solid var(--ink);
     display: flex; align-items: center; justify-content: space-between;
-    /* halftone overlay on header */
     background-image:
       radial-gradient(circle, rgba(0,0,0,0.12) 1px, transparent 1px),
       linear-gradient(var(--red), var(--red));
@@ -46,9 +143,10 @@
   }
   .logo {
     font-family: 'Paytone One', sans-serif;
-    font-size: 2.4rem; color: var(--yellow); line-height: 1;
+    font-size: 2rem; color: var(--yellow); line-height: 1;
     text-shadow: 3px 3px 0 var(--ink);
     letter-spacing: 1px;
+    cursor: pointer;
   }
   .city-pill {
     background: var(--yellow);
@@ -64,8 +162,15 @@
     animation: pulse 2s ease-in-out infinite;
   }
   @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.4;transform:scale(0.75);} }
+  .back-btn {
+    background: var(--yellow); border: 2.5px solid var(--ink);
+    border-radius: 6px; padding: 5px 10px;
+    font-size: 0.75rem; font-weight: 900; color: var(--ink);
+    cursor: pointer; box-shadow: 2px 2px 0 var(--ink);
+    display: flex; align-items: center; gap: 4px;
+  }
 
-  /* ── SCORE HERO ───────────────────────────── */
+  /* SCORE HERO */
   .hero {
     width: 100%; max-width: 480px;
     background: var(--blue);
@@ -78,16 +183,11 @@
     background-size: 10px 10px, 100% 100%;
     position: relative; overflow: hidden;
   }
-  /* action lines in background */
   .hero::before {
     content: '';
     position: absolute; top: -20px; right: 20px;
     width: 120px; height: 200px;
-    background: repeating-linear-gradient(
-      65deg,
-      transparent 0px, transparent 8px,
-      rgba(255,255,255,0.04) 8px, rgba(255,255,255,0.04) 10px
-    );
+    background: repeating-linear-gradient(65deg, transparent 0px, transparent 8px, rgba(255,255,255,0.04) 8px, rgba(255,255,255,0.04) 10px);
     pointer-events: none;
   }
   .hero-score {
@@ -109,7 +209,7 @@
   }
   .hero-stars { font-size: 1rem; color: rgba(255,255,255,0.4); letter-spacing: 3px; margin-top: 4px; }
 
-  /* ── PROGRESS ─────────────────────────────── */
+  /* PROGRESS */
   .prog {
     width: 100%; max-width: 480px;
     background: var(--yellow);
@@ -137,7 +237,24 @@
     font-size: 1rem; color: var(--ink); white-space: nowrap;
   }
 
-  /* ── SECTION HEADING ──────────────────────── */
+  /* MAP BUTTON */
+  .map-wrap { width: 100%; max-width: 480px; padding: 0 16px 4px; }
+  .map-btn {
+    width: 100%; padding: 13px 16px;
+    background: var(--red);
+    color: var(--white);
+    border: 3px solid var(--ink);
+    border-radius: 8px;
+    font-family: 'Paytone One', sans-serif;
+    font-size: 1rem; letter-spacing: 0.5px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    box-shadow: 4px 4px 0 var(--ink);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  .map-btn:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--ink); }
+
+  /* SECTION */
   .section-head {
     width: 100%; max-width: 480px;
     padding: 18px 16px 10px;
@@ -153,9 +270,8 @@
     padding-bottom: 3px;
   }
 
-  /* ── CLUE CARDS ───────────────────────────── */
+  /* CLUE CARDS */
   .clues-list { width: 100%; max-width: 480px; padding: 0 16px; }
-
   .clue-card {
     background: var(--card);
     border-radius: 10px;
@@ -166,7 +282,6 @@
     position: relative;
     transition: background 0.2s;
   }
-  /* coloured left accent — cycles through primaries */
   .clue-card::before {
     content: '';
     position: absolute; left: 0; top: 0; bottom: 0;
@@ -176,11 +291,7 @@
   .clue-card:nth-child(4n+2)::before { background: var(--blue); }
   .clue-card:nth-child(4n+3)::before { background: var(--green); }
   .clue-card:nth-child(4n+4)::before { background: var(--yellow); border-right: 1px solid rgba(0,0,0,0.1); }
-
-  .clue-card.found {
-    background: var(--green);
-    border-color: var(--ink);
-  }
+  .clue-card.found { background: var(--green); border-color: var(--ink); }
   .clue-card.found::before { background: var(--ink) !important; }
 
   .clue-top {
@@ -193,17 +304,13 @@
     flex-shrink: 0; line-height: 1;
   }
   .clue-card.found .clue-num { color: rgba(0,0,0,0.3); }
-
   .clue-riddle {
     flex: 1; font-size: 0.97rem; font-weight: 900;
     color: var(--ink); line-height: 1.3;
   }
-  .clue-card.found .clue-riddle { color: var(--ink); }
-
   .clue-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
   .clue-emoji { font-size: 1.65rem; }
   .clue-card.found .clue-emoji { display: none; }
-
   .found-check {
     display: none; width: 30px; height: 30px;
     background: var(--ink); border-radius: 50%;
@@ -211,7 +318,6 @@
     color: var(--yellow); font-size: 1rem; font-weight: 900;
   }
   .clue-card.found .found-check { display: flex; }
-
   .pts-tag {
     font-family: 'Paytone One', sans-serif;
     font-size: 0.82rem; color: var(--blue);
@@ -226,7 +332,7 @@
     border-color: rgba(0,0,0,0.2); box-shadow: none;
   }
 
-  /* ── HINT ─────────────────────────────────── */
+  /* HINT */
   .hint-box {
     display: none;
     padding: 10px 14px 12px 16px;
@@ -243,16 +349,14 @@
   }
   .clue-card.found .hint-box { background: rgba(255,255,255,0.3); border-color: rgba(0,0,0,0.15); }
 
-  /* ── PHOTO ZONE ───────────────────────────── */
+  /* PHOTO ZONE */
   .photo-zone {
     border-top: 3px solid var(--ink);
     padding: 10px 14px 12px;
     display: flex; flex-direction: column; gap: 8px;
   }
   .clue-card.found .photo-zone { border-color: rgba(0,0,0,0.15); }
-
   .file-input { display: none; }
-
   .camera-btn {
     width: 100%; padding: 12px 16px;
     background: var(--ink); color: var(--white); border: none;
@@ -264,13 +368,11 @@
   }
   .camera-btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,0.3); }
   .camera-btn:disabled { background: #bbb; box-shadow: none; cursor: not-allowed; }
-
   .photo-preview {
     display: none; width: 100%; border-radius: 6px;
     border: 3px solid var(--ink); max-height: 200px; object-fit: cover;
   }
   .photo-preview.show { display: block; }
-
   .scan-status {
     display: none; align-items: center; gap: 10px;
     font-size: 0.84rem; font-weight: 800; color: #555;
@@ -284,21 +386,14 @@
     border-radius: 50%; animation: spin 0.7s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-
   .scan-result {
     display: none; padding: 11px 13px; border-radius: 6px;
     font-size: 0.85rem; font-weight: 800; line-height: 1.5;
     border: 3px solid var(--ink);
   }
   .scan-result.show { display: block; }
-  .scan-result.success {
-    background: var(--green); color: var(--ink);
-    box-shadow: 3px 3px 0 var(--ink);
-  }
-  .scan-result.fail {
-    background: var(--red); color: white;
-    box-shadow: 3px 3px 0 var(--ink);
-  }
+  .scan-result.success { background: var(--green); color: var(--ink); box-shadow: 3px 3px 0 var(--ink); }
+  .scan-result.fail { background: var(--red); color: white; box-shadow: 3px 3px 0 var(--ink); }
   .scan-result-title {
     font-family: 'Paytone One', sans-serif;
     font-size: 0.9rem; display: flex; align-items: center; gap: 5px; margin-bottom: 3px;
@@ -312,12 +407,9 @@
     box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
   }
 
-  /* ── ACTION ROW ───────────────────────────── */
-  .clue-actions {
-    display: flex; border-top: 3px solid var(--ink);
-  }
+  /* ACTION ROW */
+  .clue-actions { display: flex; border-top: 3px solid var(--ink); }
   .clue-card.found .clue-actions { border-color: rgba(0,0,0,0.15); }
-
   .clue-btn {
     flex: 1; padding: 10px 6px; border: none; background: transparent;
     cursor: pointer; font-family: 'Nunito', sans-serif;
@@ -331,7 +423,7 @@
   .clue-btn.manual { color: var(--red); }
   .clue-btn.manual:disabled { color: #bbb; cursor: not-allowed; }
 
-  /* ── CELEBRATION SHEET ────────────────────── */
+  /* CELEBRATION SHEET */
   .celebration {
     display: none; position: fixed; inset: 0; z-index: 999;
     background: rgba(0,0,0,0.75);
@@ -339,7 +431,6 @@
   }
   .celebration.show { display: flex; animation: fadeIn 0.2s ease; }
   @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
-
   .celeb-sheet {
     background: var(--white);
     border-radius: 20px 20px 0 0;
@@ -350,14 +441,11 @@
     box-shadow: 0 -8px 0 var(--ink);
   }
   @keyframes slideUp { from{transform:translateY(100%);} to{transform:translateY(0);} }
-
-  /* coloured band at top of sheet — cycles per clue */
   .celeb-band {
     padding: 22px 22px 20px;
     border-bottom: 4px solid var(--ink);
     position: relative; overflow: hidden;
   }
-  /* halftone dots on band */
   .celeb-band::after {
     content: '';
     position: absolute; inset: 0;
@@ -369,8 +457,7 @@
   .celeb-num {
     font-family: 'Paytone One', sans-serif;
     font-size: 5rem; line-height: 1; opacity: 0.15;
-    position: absolute; right: 16px; top: 10px;
-    letter-spacing: 2px;
+    position: absolute; right: 16px; top: 10px; letter-spacing: 2px;
   }
   .celeb-name {
     font-family: 'Paytone One', sans-serif;
@@ -386,12 +473,10 @@
     padding: 5px 14px; border-radius: 6px;
     box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
   }
-
   .celeb-body { padding: 20px 22px 44px; }
   .celeb-story { font-size: 0.93rem; color: #444; line-height: 1.7; font-weight: 700; }
   .celeb-story p + p { margin-top: 12px; }
   .celeb-story em { color: var(--ink); font-style: italic; }
-
   .celeb-ai {
     margin-top: 14px; padding: 12px 14px;
     background: #e8f0ff;
@@ -401,7 +486,6 @@
     font-size: 0.82rem; color: var(--blue);
     font-weight: 800; font-style: italic;
   }
-
   .celeb-btn {
     margin-top: 20px; width: 100%; padding: 15px;
     background: var(--ink); color: white; border: none;
@@ -412,7 +496,7 @@
   }
   .celeb-btn:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 rgba(0,0,0,0.25); }
 
-  /* confetti */
+  /* CONFETTI */
   .confetti-dot {
     position: fixed; border-radius: 2px;
     animation: cfall 1.5s ease-in forwards; opacity: 0; pointer-events: none; z-index: 1000;
@@ -422,30 +506,7 @@
     100%{ transform: translateY(110vh) rotate(540deg); opacity: 0; }
   }
 
-  /* ── MAP BUTTON ──────────────────────────── */
-  .map-wrap {
-    width: 100%; max-width: 480px;
-    padding: 0 16px 4px;
-  }
-  .map-btn {
-    width: 100%; padding: 13px 16px;
-    background: var(--red);
-    color: var(--white);
-    border: 3px solid var(--ink);
-    border-radius: 8px;
-    font-family: 'Paytone One', sans-serif;
-    font-size: 1rem; letter-spacing: 0.5px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-    box-shadow: 4px 4px 0 var(--ink);
-    text-decoration: none;
-    transition: transform 0.1s, box-shadow 0.1s;
-  }
-  .map-btn:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--ink); }
-  .map-btn-icon { font-size: 1.3rem; }
-
-
-  /* ── MAP MODAL ───────────────────────────── */
+  /* MAP MODAL */
   .map-modal {
     display: none; position: fixed; inset: 0; z-index: 998;
     background: rgba(0,0,0,0.75);
@@ -476,120 +537,318 @@
     display: flex; align-items: center; justify-content: center;
     box-shadow: 2px 2px 0 var(--ink);
   }
-  .map-sub {
-    font-size: 0.78rem; font-weight: 700; color: #888;
-    padding: 0 18px 10px;
-  }
-
+  .map-sub { font-size: 0.78rem; font-weight: 700; color: #888; padding: 0 18px 10px; }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="logo">Spotted</div>
-  <div class="city-pill"><div class="pulse"></div>Dublin 🇮🇪</div>
-</div>
-
-<!-- SCORE HERO -->
-<div class="hero">
-  <div>
-    <div class="hero-score" id="scoreDisplay">0</div>
-    <div class="hero-score-label">Points scored</div>
+<!-- ══════════════════════════════════════
+     HOME SCREEN
+══════════════════════════════════════ -->
+<div id="homeScreen">
+  <div class="home-header">
+    <div class="home-logo">Spotted!</div>
+    <div class="home-tagline">The city treasure hunt for curious families 🔍</div>
   </div>
-  <div class="hero-right">
-    <div class="hero-rank" id="rankLabel">Newcomer</div>
-    <div class="hero-stars" id="rankStars">○○○○○</div>
-  </div>
-</div>
+  <div class="home-choose">Choose your city</div>
+  <div class="city-cards">
 
-<!-- PROGRESS -->
-<div class="prog">
-  <div class="prog-label">Progress</div>
-  <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
-  <div class="prog-count" id="progCount">0/17</div>
-</div>
-
-
-<!-- MAP BUTTON -->
-<div class="map-wrap">
-  <button class="map-btn" onclick="openMap()">
-    View all 17 clues on the map
-  </button>
-</div>
-
-<!-- SECTION -->
-<div class="section-head">
-  <div class="section-title">🔍 Today's Hunt</div>
-  <div class="section-sub" id="leftCount">17 to find</div>
-</div>
-
-<!-- MAP MODAL -->
-<div class="map-modal" id="mapModal" onclick="handleMapClick(event)">
-  <div class="map-sheet">
-    <div class="map-sheet-header">
-      <div class="map-sheet-title">🗺️ Dublin Hunt Map</div>
-      <button class="map-close" onclick="closeMap()">✕</button>
-    </div>
-    <div class="map-sub">Numbered pins show where each clue is hidden</div>
-    <div id="mapContainer" style="width:100%;height:380px;position:relative;border-top:3px solid #0d0d0d;overflow:hidden;"></div>
-  </div>
-</div>
-
-<!-- CARDS -->
-<div class="clues-list" id="cluesList"></div>
-
-<!-- CELEBRATION SHEET -->
-<div class="celebration" id="celebration" onclick="handleCelebClick(event)">
-  <div class="celeb-sheet" id="celebSheet">
-    <div class="celeb-band" id="celebBand">
-      <div class="celeb-band-inner">
-        <div class="celeb-num" id="celebNum">01</div>
-        <div class="celeb-name" id="celebName">Found it!</div>
-        <div class="celeb-pts-pill">🏆 <span id="celebPts">+10 pts</span></div>
+    <!-- DUBLIN -->
+    <div class="city-card" onclick="startCity('dublin')">
+      <div class="city-card-band" style="background:#e8192c;">
+        <span class="city-card-flag">🇮🇪</span>
+        <div class="city-card-name">Dublin</div>
+        <div class="city-card-clues">17 clues to find</div>
+      </div>
+      <div class="city-card-body">
+        <div class="city-card-desc">Spires, statues, bullet holes and a saint's heart. Ireland's capital is stranger than it looks.</div>
+        <div class="city-card-arrow">→</div>
+      </div>
+      <div class="city-progress-row" id="dublin-progress-row" style="display:none">
+        <div class="city-prog-track"><div class="city-prog-fill" id="dublin-prog-fill" style="width:0%"></div></div>
+        <div class="city-prog-label" id="dublin-prog-label"></div>
       </div>
     </div>
-    <div class="celeb-body">
-      <div class="celeb-story" id="celebStory"></div>
-      <div class="celeb-ai" id="celebAi" style="display:none"></div>
-      <button class="celeb-btn" onclick="closeCelebration()">Keep exploring! →</button>
+
+    <!-- EDINBURGH -->
+    <div class="city-card" onclick="startCity('edinburgh')">
+      <div class="city-card-band" style="background:#0047FF;">
+        <span class="city-card-flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
+        <div class="city-card-name">Edinburgh</div>
+        <div class="city-card-clues">17 clues to find</div>
+      </div>
+      <div class="city-card-body">
+        <div class="city-card-desc">Graveyards, wizards, witch burnings and a bear who smoked cigarettes. Scotland awaits.</div>
+        <div class="city-card-arrow">→</div>
+      </div>
+      <div class="city-progress-row" id="edinburgh-progress-row" style="display:none">
+        <div class="city-prog-track"><div class="city-prog-fill" id="edinburgh-prog-fill" style="width:0%"></div></div>
+        <div class="city-prog-label" id="edinburgh-prog-label"></div>
+      </div>
     </div>
+
   </div>
 </div>
 
+<!-- ══════════════════════════════════════
+     GAME SCREEN
+══════════════════════════════════════ -->
+<div id="gameScreen">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo" onclick="goHome()">Spotted!</div>
+    <div class="city-pill"><div class="pulse"></div><span id="cityLabel">Dublin 🇮🇪</span></div>
+    <button class="back-btn" onclick="goHome()">← Cities</button>
+  </div>
+
+  <!-- SCORE HERO -->
+  <div class="hero">
+    <div>
+      <div class="hero-score" id="scoreDisplay">0</div>
+      <div class="hero-score-label">Points scored</div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-rank" id="rankLabel">Newcomer</div>
+      <div class="hero-stars" id="rankStars">○○○○○</div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="prog">
+    <div class="prog-label">Progress</div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    <div class="prog-count" id="progCount">0/17</div>
+  </div>
+
+  <!-- MAP BUTTON -->
+  <div class="map-wrap" style="padding-top:12px">
+    <button class="map-btn" onclick="openMap()">🗺️ View all clues on the map</button>
+  </div>
+
+  <!-- SECTION -->
+  <div class="section-head">
+    <div class="section-title">🔍 The Hunt</div>
+    <div class="section-sub" id="leftCount">17 to find</div>
+  </div>
+
+  <!-- CLUE CARDS -->
+  <div class="clues-list" id="cluesList"></div>
+
+  <!-- MAP MODAL -->
+  <div class="map-modal" id="mapModal" onclick="handleMapClick(event)">
+    <div class="map-sheet">
+      <div class="map-sheet-header">
+        <div class="map-sheet-title" id="mapTitle">🗺️ Dublin Hunt Map</div>
+        <button class="map-close" onclick="closeMap()">✕</button>
+      </div>
+      <div class="map-sub">Numbered pins show where each clue is hidden</div>
+      <div id="mapContainer" style="width:100%;height:380px;position:relative;border-top:3px solid #0d0d0d;overflow:hidden;background:#e8e4dc;"></div>
+    </div>
+  </div>
+
+  <!-- CELEBRATION SHEET -->
+  <div class="celebration" id="celebration" onclick="handleCelebClick(event)">
+    <div class="celeb-sheet" id="celebSheet">
+      <div class="celeb-band" id="celebBand">
+        <div class="celeb-band-inner">
+          <div class="celeb-num" id="celebNum">01</div>
+          <div class="celeb-name" id="celebName">Found it!</div>
+          <div class="celeb-pts-pill">🏆 <span id="celebPts">+10 pts</span></div>
+        </div>
+      </div>
+      <div class="celeb-body">
+        <div class="celeb-story" id="celebStory"></div>
+        <div class="celeb-ai" id="celebAi" style="display:none"></div>
+        <button class="celeb-btn" onclick="closeCelebration()">Keep exploring! →</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /gameScreen -->
+
 <script>
-// Band colours cycle: red, blue, green, yellow
-const BAND_COLS   = ['#e8192c','#0047FF','#00C853','#FFE000'];
-const BAND_TEXT   = ['#FFE000','#FFE000','#0d0d0d','#0d0d0d'];
+// ════════════════════════════════════════════════════════════════
+//  CITY DATA
+// ════════════════════════════════════════════════════════════════
 
-const clues = [
-  { id:1,  emoji:'🛒', points:10,  riddle:'A woman with a fishing cart',                                hint:'She stands just beside St Andrew\'s Church, off Suffolk Street near the bottom of Grafton Street.',               name:'Molly Malone',                      story:`<p>This bronze lady is Dublin's most famous resident — and she's never once been to the shops. Molly Malone was a fishmonger who wheeled her barrow through the city in the 1600s, crying "Cockles and mussels, alive alive oh!" — which is now basically Dublin's unofficial anthem.</p><p>Dubliners are famously cheeky about her. They call her <em>"The Tart with the Cart"</em> — partly because of her low-cut dress and partly because that's just how Dublin people show affection. She's also been stolen, moved, and argued over for decades. Classic Dublin drama.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Molly Malone statue in Dublin — a bronze woman in a low-cut period dress pushing a fish cart/wheelbarrow, near St Andrew's Church off Suffolk Street. Does this photo show the Molly Malone statue or a clear part of it? Be generous with partial or blurry shots. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge without spoiling the answer."}` },
-  { id:2,  emoji:'📍', points:10,  riddle:'A metal spike taller than the Statue of Liberty',            hint:'Walk up O\'Connell Street — you\'ll see it from miles away.',                                                     name:'The Spire',                          story:`<p>At 120 metres tall, the Spire of Dublin is basically a giant needle stuck into the middle of the city. It's made of polished stainless steel, weighs 126 tonnes, and has absolutely no purpose except to look dramatic — which it does, brilliantly.</p><p>Dubliners are ruthless with nicknames. It's been called <em>"The Stiletto in the Ghetto"</em>, <em>"The Stiffy by the Liffey"</em>, and <em>"The Poker"</em>. When it was unveiled in 2003, some people thought it was an eyesore. Now it's one of the most photographed things in Ireland. Classic Dublin — insult it for a decade, then put it on a tea towel.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is The Spire of Dublin — a very tall, thin stainless-steel needle/spike on O'Connell Street, 120m high, tapering to a fine point. Does this photo show the Spire? Be generous with angled or partial shots. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
-  { id:3,  emoji:'🪲', points:20,  riddle:'A giant insect eating a building',                           hint:'Look above the entrance to the Natural History Museum on Merrion Street Upper.',                                  name:'The Giant Woodlouse',                story:`<p>Clinging to the outside of the Natural History Museum is a massive bronze woodlouse — or "slater bug" if you're feeling scientific about it. It was created by artist Eilís O'Connell and looks like it's genuinely trying to climb inside for a snoop around, which honestly, fair enough.</p><p>The museum itself is nicknamed <em>"The Dead Zoo"</em> because it's been almost completely unchanged since the Victorian era — same dusty glass cases, same slightly alarming taxidermy, same magnificent creaky floors. The woodlouse outside is the museum's way of saying: yes, we know we're wonderfully odd, and we're fine with it.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is a large bronze woodlouse/crustacean sculpture on the exterior wall of the Natural History Museum on Merrion Street Upper, Dublin. Does the photo show this giant insect sculpture on the museum wall? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
-  { id:4,  emoji:'🚪', points:10,  riddle:'A bright red Georgian front door',                           hint:'Try Merrion Square or Fitzwilliam Square — every house has a different colour.',                                   name:'Georgian Doors',                     story:`<p>Dublin's colourful Georgian doors are one of the most photographed things in Ireland — and the story behind them is wonderfully petty. When Queen Victoria died in 1901, the British government ordered all doors to be painted black as a mark of respect. Dublin landlords, being Dublin landlords, painted them every other colour they could find just to be difficult.</p><p>There are now over 500 door colours across the Georgian squares. Yellow, turquoise, deep purple, fire-engine red — each one framed by a semicircular fanlight window above it. They've been on postcards, biscuit tins, and tea towels for over a century. The pettiness lives on.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is one of Dublin's famous colourful Georgian doors — a brightly painted front door on a Georgian terraced townhouse, with a distinctive fanlight (semicircular window) above it and stone steps. Any bold colour counts. Does the photo show a colourful Georgian-style door on a Dublin townhouse? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
-  { id:5,  emoji:'🧍', points:15,  riddle:'Two starving people walking towards the river',              hint:'Walk along Custom House Quay on the north side of the Liffey, near the Jeanie Johnston tall ship.',               name:'The Famine Memorial',                story:`<p>These haunting bronze figures are among the most powerful things in all of Dublin. Seven gaunt, hollow-eyed statues walk towards the River Liffey — recreating the desperate march of Irish people fleeing the Great Famine of the 1840s, when over a million people died and another million emigrated.</p><p>Sculptor Rowan Gillespie made each figure look truly desperate — clothes ragged, bones visible, one figure with a dog trailing behind. They were unveiled in 1997, and the then-President of Ireland wept at the ceremony. It's one of those rare pieces of public art that actually stops you in your tracks.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Famine Memorial on Custom House Quay, Dublin — tall, thin, haunting bronze figures of starving people walking, along the River Liffey near the Jeanie Johnston tall ship. Does the photo show these bronze famine figures or part of the sculpture? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
-  { id:6,  emoji:'🐴', points:15,  riddle:'A horse with no rider',                                      hint:'It\'s near the Bank of Ireland on College Green — look up.',                                                      name:'The Riderless Horse',                story:`<p>Perched on top of a tall stone column near College Green is a magnificent horse — with absolutely nobody on it. The statue was made to hold King William III (of "Battle of the Boyne" fame), but the rider kept being attacked, blown up, and vandalised by Dubliners who were not, it's fair to say, massive fans.</p><p>After decades of being battered, the rider was simply removed and never replaced. Now it's just a very regal horse staring into the middle distance, alone, unbothered, and honestly looking much better for it. A horse that outlasted its king. Very Dublin.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is a bronze horse statue on top of a stone pedestal/column near the Bank of Ireland on College Green, Dublin. The horse has no rider. Does the photo show this riderless horse statue on its pillar? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
-  { id:7,  emoji:'🎵', points:20,  riddle:'Giant metal sticks you grab to make music',                  hint:'Find Meeting House Square in Temple Bar — the poles are set into the cobblestones.',                               name:'The Singing Ringing Poles',          story:`<p>Hidden in the cobblestoned Meeting House Square in Temple Bar is a cluster of tall metal poles — and if you grab two of them at the same time, an electric current passes through your body completing a circuit, and an eerie droning sound fills the air. You are, briefly, a human musical instrument.</p><p>It's completely safe, deeply weird, and absolutely brilliant. Kids tend to scream the first time it happens, then immediately do it again. The square is surrounded by a weekend food market, a photography gallery, and the Irish Film Institute, which lives in a former Quaker meeting hall.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is a set of tall interactive metal pole sculptures in Meeting House Square, Temple Bar, Dublin — tall, thin metal poles set into the ground that you can touch to create sound/music. Does the photo show these metal poles or this interactive sculpture? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
-  { id:8,  emoji:'🎸', points:15,  riddle:'A man on a bench who looks like he\'s been asleep since 1980', hint:'Look near Merchant\'s Arch on the south side of the Ha\'penny Bridge.',                                          name:'The Busker (Willie the Wisp)',       story:`<p>Slumped on a bench near the Ha'penny Bridge is a bronze busker, hat in hand, looking like he's either meditating deeply or had a very long night. Dubliners have nicknamed him <em>"Willie the Wisp"</em>, and he fits right in — this corner of the city has been busker territory for generations.</p><p>Dublin takes its street music very seriously. The city has produced Van Morrison, Sinéad O'Connor, Hozier, and Glen Hansard — who went from busking on Grafton Street to winning an Academy Award. The Ha'penny Bridge got its name because that's what pedestrians paid to cross it when it opened in 1816.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is a bronze statue of a seated, slouched busker/musician on a bench near the Ha'penny Bridge / Merchant's Arch area in Temple Bar, Dublin. Does the photo show this bronze busker statue? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
-  { id:9,  emoji:'📚', points:10,  riddle:'A street full of second-hand books on the pavement',        hint:'Walk along Nassau Street, right beside the wall of Trinity College.',                                              name:'The Nassau Street Book Stalls',      story:`<p>Running alongside the ancient stone wall of Trinity College, the second-hand book stalls of Nassau Street have been part of Dublin life for generations. Rain or shine, people flick through old paperbacks, battered atlases, and out-of-print curiosities while the world cycles past.</p><p>Dublin takes books extremely seriously — it was the first city in the world to be named a UNESCO City of Literature. It has produced four Nobel Prize winners in literature: Shaw, Yeats, Beckett, and Seamus Heaney. The bookshops along here — especially nearby Hodges Figgis — have been selling books longer than most countries have had electricity.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the outdoor second-hand book stalls along Nassau Street beside the wall of Trinity College Dublin — rows of books on outdoor stalls or tables on the footpath. Does the photo show outdoor book stalls or second-hand books displayed on a Dublin street? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
-  { id:10, emoji:'🌳', points:20,  riddle:'A tree eating a park bench',                                 hint:'Head to King\'s Inns Park on Constitution Hill, on the north side of the city.',                                  name:'The Hungry Tree',                    story:`<p>In the grounds of King's Inns — Dublin's ancient school for barristers — there is a London plane tree that has been slowly eating a cast iron park bench for over a century. The tree has grown around the bench so completely that the backrest and legs are now disappearing into the trunk, as if the tree simply decided the bench was in its way and started swallowing it whole.</p><p>Nobody moved the bench. Nobody stopped the tree. They just let it happen, and now it's one of the most quietly astonishing things in Dublin — listed as an official Irish Heritage Tree purely because it's so wonderfully weird. Nature: 1, Furniture: 0.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Hungry Tree at King's Inns in Dublin — a large London plane tree whose trunk has grown around and is absorbing a cast iron park bench, so the bench is embedded into the tree. Does the photo show this tree with the bench growing into it? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
-  { id:11, emoji:'👸', points:15,  riddle:'Four hairy princesses guarding a fancy hotel',               hint:'Look at the lamp posts outside the Shelbourne Hotel on St Stephen\'s Green.',                                     name:'The Shelbourne Princesses',          story:`<p>Flanking the entrance to the Shelbourne Hotel — one of Dublin's grandest — are four bronze female figures holding torches aloft. They are the Nubian Princesses, and they have been standing guard here since 1867, watching over everything from the signing of Ireland's constitution to countless celebrity check-ins.</p><p>Their torches are now electric lamps, discreetly updated in the 1900s. The Shelbourne has hosted Michael Collins, Princess Grace of Monaco, and John F. Kennedy. The princesses have outlasted all of them, staring serenely across St Stephen's Green, unbothered by everything.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Nubian Princess lamp post statues outside the Shelbourne Hotel on St Stephen's Green, Dublin — tall bronze female figures with elaborate robes holding lamps/torches, flanking the hotel entrance. Does the photo show one or more of these bronze princess lamp post figures? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
-  { id:12, emoji:'❤️', points:15,  riddle:'A wall covered in ceramic hearts',                           hint:'Find Love Lane — it\'s a little alleyway tucked inside Temple Bar.',                                              name:'The Wall of Hearts, Love Lane',      story:`<p>Hidden in a narrow cobblestoned lane in the heart of Temple Bar is a wall completely covered in handmade ceramic hearts — hundreds of them, glazed in every colour, left by visitors from around the world. Some have names, some have dates, some have messages that are funny, some that are devastating, some that are just a little bit embarrassing.</p><p>Temple Bar is Dublin's "cultural quarter" — which in practice means cobblestones, street art, live music spilling out of pubs, and tourists eating chips. But Love Lane is one of its genuine secrets, accumulating hearts and stories year after year.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is a wall covered in colourful ceramic/pottery hearts in Love Lane, a small alleyway in Temple Bar, Dublin. Does the photo show this wall of ceramic hearts or part of it? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
-  { id:13, emoji:'🎶', points:15,  riddle:'A giant harp lying on its side in the river',                hint:'Walk along the quays towards the Docklands — look for the bridge that looks like harp strings.',                  name:'The Samuel Beckett Bridge',          story:`<p>Stretching across the River Liffey near the Docklands is the Samuel Beckett Bridge — designed by Santiago Calatrava to look like a giant Irish harp lying on its side. Because why build a normal bridge when you can build a massive national symbol?</p><p>It opened in 2009 and can rotate 90 degrees to let tall ships pass — which it does a few times a year, to everyone's delight. It's named after Samuel Beckett, the Dublin-born writer who wrote <em>Waiting for Godot</em> — a play famously described as "nothing happens, twice."</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Samuel Beckett Bridge in Dublin — a distinctive cable-stayed bridge over the River Liffey designed to look like a harp lying on its side, with a curved white pylon and harp-like cables. Does the photo show the Samuel Beckett Bridge or a clear portion of it? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
-  { id:14, emoji:'🎩', points:15,  riddle:'A man lazing in a park in a bright green jacket',            hint:'He\'s in Merrion Square Park — look for the corner near the Oscar Wilde House.',                                   name:'The Oscar Wilde Statue',             story:`<p>Draped across a large rock in Merrion Square is a life-size statue of Oscar Wilde — Dublin's most brilliantly witty export — wearing a spectacular jade-green smoking jacket and looking magnificently unbothered by everything. He's gazing across at his childhood home on the other side of the square.</p><p>Wilde grew up in Dublin, studied at Trinity College, and went on to become the most quoted man in the English language. He gave the world lines like <em>"I can resist everything except temptation."</em> The statue captures him perfectly — relaxed, colourful, and faintly smug, as he absolutely should be.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Oscar Wilde statue in Merrion Square Park, Dublin — a colourful reclining life-size figure draped over a large rock, wearing a bright green/jade smoking jacket. Does the photo show this Oscar Wilde statue? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
-  { id:15, emoji:'💥', points:20,  riddle:'Bullet holes in a monument',                                 hint:'Look carefully at the base of the O\'Connell Monument at the southern end of O\'Connell Street, near the bridge.', name:'Bullet Holes — O\'Connell Monument', story:`<p>The grand monument to Daniel O'Connell — "The Liberator," who won Catholic emancipation for Ireland in 1829 — stands at the foot of O'Connell Street. Look closely at the bronze figures around its base and you'll find them riddled with actual bullet holes from the 1916 Easter Rising, when fighting raged through these very streets.</p><p>The Rising was a rebellion against British rule, and O'Connell Street was one of the bloodiest battlegrounds. Those holes are over 100 years old and nobody has ever filled them in. Dublin wears its history on its buildings, quite literally.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the O'Connell Monument at the southern end of O'Connell Street in Dublin — a large bronze monument with winged figures at the base that have visible bullet holes from the 1916 Easter Rising. Does the photo show the O'Connell Monument or the bullet-marked bronze figures at its base? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
-  { id:16, emoji:'🐒', points:25,  riddle:'Monkeys playing billiards',                                  hint:'Look up at the stone carvings on the facade of the building on Kildare Street, next to the National Museum.',    name:'The Kildare Street Monkeys',         story:`<p>High up on the red brick facade of the former Kildare Street Club — a very grand, very stuffy gentlemen's club built in the 1860s — are carved stone animals engaged in deeply undignified activities. Among them: monkeys playing billiards, a dog reading a newspaper, and a bear playing a stringed instrument.</p><p>Nobody is entirely sure why. The carvings were done by the O'Shea brothers, two Cork stonemasons with a habit of adding their own jokes to buildings. The Kildare Street Club was one of the most snobbish establishments in Victorian Dublin — so the monkeys playing snooker may have been the O'Sheas having the very last laugh.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the carved stone animal decorations on the facade of the former Kildare Street Club building — notably monkeys playing billiards/snooker carved into the red brick building near the National Museum on Kildare Street, Dublin. Does the photo show these animal stone carvings on the building facade? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
-  { id:17, emoji:'💘', points:25,  riddle:'The actual heart of Saint Valentine',                        hint:'Go to Whitefriar Street Church on Aungier Street — it\'s inside, in a golden casket.',                            name:'The Heart of St Valentine',          story:`<p>In a small golden casket inside Whitefriar Street Church on Aungier Street lies what the Catholic Church officially recognises as the remains of Saint Valentine — including what is believed to be his actual heart. Yes, really. The heart of the patron saint of love is kept in Dublin, of all places.</p><p>The relics were given to the church in 1836 by Pope Gregory XVI, apparently because a Carmelite priest from Dublin asked very nicely. Valentine was a Roman priest executed around 270 AD for performing secret marriages the Emperor had banned. On 14th February, people come from around the world to leave love notes beside the casket. One of the strangest and most romantic things in Europe.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the golden reliquary casket containing the remains of Saint Valentine inside Whitefriar Street Church on Aungier Street, Dublin — a decorative golden/ornate box or casket in a church setting. Does the photo show the Saint Valentine reliquary/casket in this Dublin church? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` }
-];
+const CITIES = {};
 
-let foundSet = new Set(), totalScore = 0;
-const totalCards = clues.length;
+// ── DUBLIN ───────────────────────────────────────────────────────
+CITIES.dublin = {
+  label: 'Dublin 🇮🇪',
+  mapTitle: '🗺️ Dublin Hunt Map',
+  mapState: { zoom: 13, lat: 53.343, lng: -6.256, panX: 0, panY: 0 },
+  ranks: [[0,'Newcomer','○○○○○'],[3,'Scout','●○○○○'],[6,'Explorer','●●○○○'],[9,'Adventurer','●●●○○'],[13,'City Hunter','●●●●○'],[17,'Dublin Legend!','●●●●●']],
+  locations: [
+    { id:1,  lat:53.34355, lng:-6.26104 },
+    { id:2,  lat:53.34979, lng:-6.26023 },
+    { id:3,  lat:53.34021, lng:-6.25221 },
+    { id:4,  lat:53.33870, lng:-6.25330 },
+    { id:5,  lat:53.34876, lng:-6.24558 },
+    { id:6,  lat:53.34451, lng:-6.25939 },
+    { id:7,  lat:53.34543, lng:-6.26572 },
+    { id:8,  lat:53.34601, lng:-6.26742 },
+    { id:9,  lat:53.34297, lng:-6.25808 },
+    { id:10, lat:53.35201, lng:-6.27366 },
+    { id:11, lat:53.33890, lng:-6.25610 },
+    { id:12, lat:53.34537, lng:-6.26477 },
+    { id:13, lat:53.34785, lng:-6.23948 },
+    { id:14, lat:53.34080, lng:-6.25062 },
+    { id:15, lat:53.34836, lng:-6.25974 },
+    { id:16, lat:53.34059, lng:-6.25435 },
+    { id:17, lat:53.33988, lng:-6.26674 },
+  ],
+  clues: [
+    { id:1,  emoji:'🛒', points:10,  riddle:'A woman with a fishing cart', hint:'She stands just beside St Andrew\'s Church, off Suffolk Street near the bottom of Grafton Street.', name:'Molly Malone', story:`<p>This bronze lady is Dublin's most famous resident — and she's never once been to the shops. Molly Malone was a fishmonger who wheeled her barrow through the city in the 1600s, crying "Cockles and mussels, alive alive oh!" — which is now basically Dublin's unofficial anthem.</p><p>Dubliners are famously cheeky about her. They call her <em>"The Tart with the Cart"</em> — partly because of her low-cut dress and partly because that's just how Dublin people show affection. She's also been stolen, moved, and argued over for decades. Classic Dublin drama.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Molly Malone statue in Dublin — a bronze woman in a low-cut period dress pushing a fish cart/wheelbarrow, near St Andrew's Church off Suffolk Street. Does this photo show the Molly Malone statue or a clear part of it? Be generous with partial or blurry shots. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge without spoiling the answer."}` },
+    { id:2,  emoji:'📍', points:10,  riddle:'A metal spike taller than the Statue of Liberty', hint:'Walk up O\'Connell Street — you\'ll see it from miles away.', name:'The Spire', story:`<p>At 120 metres tall, the Spire of Dublin is basically a giant needle stuck into the middle of the city. It's made of polished stainless steel, weighs 126 tonnes, and has absolutely no purpose except to look dramatic — which it does, brilliantly.</p><p>Dubliners are ruthless with nicknames. It's been called <em>"The Stiletto in the Ghetto"</em>, <em>"The Stiffy by the Liffey"</em>, and <em>"The Poker"</em>. When it was unveiled in 2003, some people thought it was an eyesore. Now it's one of the most photographed things in Ireland. Classic Dublin — insult it for a decade, then put it on a tea towel.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is The Spire of Dublin — a very tall, thin stainless-steel needle/spike on O'Connell Street, 120m high, tapering to a fine point. Does this photo show the Spire? Be generous with angled or partial shots. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:3,  emoji:'🪲', points:20,  riddle:'A giant insect eating a building', hint:'Look above the entrance to the Natural History Museum on Merrion Street Upper.', name:'The Giant Woodlouse', story:`<p>Clinging to the outside of the Natural History Museum is a massive bronze woodlouse — or "slater bug" if you're feeling scientific about it. It was created by artist Eilís O'Connell and looks like it's genuinely trying to climb inside for a snoop around, which honestly, fair enough.</p><p>The museum itself is nicknamed <em>"The Dead Zoo"</em> because it's been almost completely unchanged since the Victorian era — same dusty glass cases, same slightly alarming taxidermy, same magnificent creaky floors. The woodlouse outside is the museum's way of saying: yes, we know we're wonderfully odd, and we're fine with it.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is a large bronze woodlouse/crustacean sculpture on the exterior wall of the Natural History Museum on Merrion Street Upper, Dublin. Does the photo show this giant insect sculpture on the museum wall? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:4,  emoji:'🚪', points:10,  riddle:'A bright red Georgian front door', hint:'Try Merrion Square or Fitzwilliam Square — every house has a different colour.', name:'Georgian Doors', story:`<p>Dublin's colourful Georgian doors are one of the most photographed things in Ireland — and the story behind them is wonderfully petty. When Queen Victoria died in 1901, the British government ordered all doors to be painted black as a mark of respect. Dublin landlords, being Dublin landlords, painted them every other colour they could find just to be difficult.</p><p>There are now over 500 door colours across the Georgian squares. Yellow, turquoise, deep purple, fire-engine red — each one framed by a semicircular fanlight window above it. They've been on postcards, biscuit tins, and tea towels for over a century. The pettiness lives on.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is one of Dublin's famous colourful Georgian doors — a brightly painted front door on a Georgian terraced townhouse, with a distinctive fanlight (semicircular window) above it and stone steps. Any bold colour counts. Does the photo show a colourful Georgian-style door on a Dublin townhouse? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:5,  emoji:'🧍', points:15,  riddle:'Two starving people walking towards the river', hint:'Walk along Custom House Quay on the north side of the Liffey, near the Jeanie Johnston tall ship.', name:'The Famine Memorial', story:`<p>These haunting bronze figures are among the most powerful things in all of Dublin. Seven gaunt, hollow-eyed statues walk towards the River Liffey — recreating the desperate march of Irish people fleeing the Great Famine of the 1840s, when over a million people died and another million emigrated.</p><p>Sculptor Rowan Gillespie made each figure look truly desperate — clothes ragged, bones visible, one figure with a dog trailing behind. They were unveiled in 1997, and the then-President of Ireland wept at the ceremony. It's one of those rare pieces of public art that actually stops you in your tracks.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Famine Memorial on Custom House Quay, Dublin — tall, thin, haunting bronze figures of starving people walking, along the River Liffey near the Jeanie Johnston tall ship. Does the photo show these bronze famine figures or part of the sculpture? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:6,  emoji:'🐴', points:15,  riddle:'A horse with no rider', hint:'It\'s near the Bank of Ireland on College Green — look up.', name:'The Riderless Horse', story:`<p>Perched on top of a tall stone column near College Green is a magnificent horse — with absolutely nobody on it. The statue was made to hold King William III (of "Battle of the Boyne" fame), but the rider kept being attacked, blown up, and vandalised by Dubliners who were not, it's fair to say, massive fans.</p><p>After decades of being battered, the rider was simply removed and never replaced. Now it's just a very regal horse staring into the middle distance, alone, unbothered, and honestly looking much better for it. A horse that outlasted its king. Very Dublin.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is a bronze horse statue on top of a stone pedestal/column near the Bank of Ireland on College Green, Dublin. The horse has no rider. Does the photo show this riderless horse statue on its pillar? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:7,  emoji:'🎵', points:20,  riddle:'Giant metal sticks you grab to make music', hint:'Find Meeting House Square in Temple Bar — the poles are set into the cobblestones.', name:'The Singing Ringing Poles', story:`<p>Hidden in the cobblestoned Meeting House Square in Temple Bar is a cluster of tall metal poles — and if you grab two of them at the same time, an electric current passes through your body completing a circuit, and an eerie droning sound fills the air. You are, briefly, a human musical instrument.</p><p>It's completely safe, deeply weird, and absolutely brilliant. Kids tend to scream the first time it happens, then immediately do it again. The square is surrounded by a weekend food market, a photography gallery, and the Irish Film Institute, which lives in a former Quaker meeting hall.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is a set of tall interactive metal pole sculptures in Meeting House Square, Temple Bar, Dublin — tall, thin metal poles set into the ground that you can touch to create sound/music. Does the photo show these metal poles or this interactive sculpture? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:8,  emoji:'🎸', points:15,  riddle:'A man on a bench who looks like he\'s been asleep since 1980', hint:'Look near Merchant\'s Arch on the south side of the Ha\'penny Bridge.', name:'The Busker (Willie the Wisp)', story:`<p>Slumped on a bench near the Ha'penny Bridge is a bronze busker, hat in hand, looking like he's either meditating deeply or had a very long night. Dubliners have nicknamed him <em>"Willie the Wisp"</em>, and he fits right in — this corner of the city has been busker territory for generations.</p><p>Dublin takes its street music very seriously. The city has produced Van Morrison, Sinéad O'Connor, Hozier, and Glen Hansard — who went from busking on Grafton Street to winning an Academy Award. The Ha'penny Bridge got its name because that's what pedestrians paid to cross it when it opened in 1816.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is a bronze statue of a seated, slouched busker/musician on a bench near the Ha'penny Bridge / Merchant's Arch area in Temple Bar, Dublin. Does the photo show this bronze busker statue? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:9,  emoji:'📚', points:10,  riddle:'A street full of second-hand books on the pavement', hint:'Walk along Nassau Street, right beside the wall of Trinity College.', name:'The Nassau Street Book Stalls', story:`<p>Running alongside the ancient stone wall of Trinity College, the second-hand book stalls of Nassau Street have been part of Dublin life for generations. Rain or shine, people flick through old paperbacks, battered atlases, and out-of-print curiosities while the world cycles past.</p><p>Dublin takes books extremely seriously — it was the first city in the world to be named a UNESCO City of Literature. It has produced four Nobel Prize winners in literature: Shaw, Yeats, Beckett, and Seamus Heaney. The bookshops along here — especially nearby Hodges Figgis — have been selling books longer than most countries have had electricity.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the outdoor second-hand book stalls along Nassau Street beside the wall of Trinity College Dublin — rows of books on outdoor stalls or tables on the footpath. Does the photo show outdoor book stalls or second-hand books displayed on a Dublin street? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:10, emoji:'🌳', points:20,  riddle:'A tree eating a park bench', hint:'Head to King\'s Inns Park on Constitution Hill, on the north side of the city.', name:'The Hungry Tree', story:`<p>In the grounds of King's Inns — Dublin's ancient school for barristers — there is a London plane tree that has been slowly eating a cast iron park bench for over a century. The tree has grown around the bench so completely that the backrest and legs are now disappearing into the trunk, as if the tree simply decided the bench was in its way and started swallowing it whole.</p><p>Nobody moved the bench. Nobody stopped the tree. They just let it happen, and now it's one of the most quietly astonishing things in Dublin — listed as an official Irish Heritage Tree purely because it's so wonderfully weird. Nature: 1, Furniture: 0.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Hungry Tree at King's Inns in Dublin — a large London plane tree whose trunk has grown around and is absorbing a cast iron park bench, so the bench is embedded into the tree. Does the photo show this tree with the bench growing into it? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:11, emoji:'👸', points:15,  riddle:'Four hairy princesses guarding a fancy hotel', hint:'Look at the lamp posts outside the Shelbourne Hotel on St Stephen\'s Green.', name:'The Shelbourne Princesses', story:`<p>Flanking the entrance to the Shelbourne Hotel — one of Dublin's grandest — are four bronze female figures holding torches aloft. They are the Nubian Princesses, and they have been standing guard here since 1867, watching over everything from the signing of Ireland's constitution to countless celebrity check-ins.</p><p>Their torches are now electric lamps, discreetly updated in the 1900s. The Shelbourne has hosted Michael Collins, Princess Grace of Monaco, and John F. Kennedy. The princesses have outlasted all of them, staring serenely across St Stephen's Green, unbothered by everything.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Nubian Princess lamp post statues outside the Shelbourne Hotel on St Stephen's Green, Dublin — tall bronze female figures with elaborate robes holding lamps/torches, flanking the hotel entrance. Does the photo show one or more of these bronze princess lamp post figures? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:12, emoji:'❤️', points:15,  riddle:'A wall covered in ceramic hearts', hint:'Find Love Lane — it\'s a little alleyway tucked inside Temple Bar.', name:'The Wall of Hearts, Love Lane', story:`<p>Hidden in a narrow cobblestoned lane in the heart of Temple Bar is a wall completely covered in handmade ceramic hearts — hundreds of them, glazed in every colour, left by visitors from around the world. Some have names, some have dates, some have messages that are funny, some that are devastating, some that are just a little bit embarrassing.</p><p>Temple Bar is Dublin's "cultural quarter" — which in practice means cobblestones, street art, live music spilling out of pubs, and tourists eating chips. But Love Lane is one of its genuine secrets, accumulating hearts and stories year after year.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is a wall covered in colourful ceramic/pottery hearts in Love Lane, a small alleyway in Temple Bar, Dublin. Does the photo show this wall of ceramic hearts or part of it? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:13, emoji:'🎶', points:15,  riddle:'A giant harp lying on its side in the river', hint:'Walk along the quays towards the Docklands — look for the bridge that looks like harp strings.', name:'The Samuel Beckett Bridge', story:`<p>Stretching across the River Liffey near the Docklands is the Samuel Beckett Bridge — designed by Santiago Calatrava to look like a giant Irish harp lying on its side. Because why build a normal bridge when you can build a massive national symbol?</p><p>It opened in 2009 and can rotate 90 degrees to let tall ships pass — which it does a few times a year, to everyone's delight. It's named after Samuel Beckett, the Dublin-born writer who wrote <em>Waiting for Godot</em> — a play famously described as "nothing happens, twice."</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Samuel Beckett Bridge in Dublin — a distinctive cable-stayed bridge over the River Liffey designed to look like a harp lying on its side, with a curved white pylon and harp-like cables. Does the photo show the Samuel Beckett Bridge or a clear portion of it? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:14, emoji:'🎩', points:15,  riddle:'A man lazing in a park in a bright green jacket', hint:'He\'s in Merrion Square Park — look for the corner near the Oscar Wilde House.', name:'The Oscar Wilde Statue', story:`<p>Draped across a large rock in Merrion Square is a life-size statue of Oscar Wilde — Dublin's most brilliantly witty export — wearing a spectacular jade-green smoking jacket and looking magnificently unbothered by everything. He's gazing across at his childhood home on the other side of the square.</p><p>Wilde grew up in Dublin, studied at Trinity College, and went on to become the most quoted man in the English language. He gave the world lines like <em>"I can resist everything except temptation."</em> The statue captures him perfectly — relaxed, colourful, and faintly smug, as he absolutely should be.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Oscar Wilde statue in Merrion Square Park, Dublin — a colourful reclining life-size figure draped over a large rock, wearing a bright green/jade smoking jacket. Does the photo show this Oscar Wilde statue? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:15, emoji:'💥', points:20,  riddle:'Bullet holes in a monument', hint:'Look carefully at the base of the O\'Connell Monument at the southern end of O\'Connell Street, near the bridge.', name:'Bullet Holes — O\'Connell Monument', story:`<p>The grand monument to Daniel O'Connell — "The Liberator," who won Catholic emancipation for Ireland in 1829 — stands at the foot of O'Connell Street. Look closely at the bronze figures around its base and you'll find them riddled with actual bullet holes from the 1916 Easter Rising, when fighting raged through these very streets.</p><p>The Rising was a rebellion against British rule, and O'Connell Street was one of the bloodiest battlegrounds. Those holes are over 100 years old and nobody has ever filled them in. Dublin wears its history on its buildings, quite literally.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the O'Connell Monument at the southern end of O'Connell Street in Dublin — a large bronze monument with winged figures at the base that have visible bullet holes from the 1916 Easter Rising. Does the photo show the O'Connell Monument or the bullet-marked bronze figures at its base? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:16, emoji:'🐒', points:25,  riddle:'Monkeys playing billiards', hint:'Look up at the stone carvings on the facade of the building on Kildare Street, next to the National Museum.', name:'The Kildare Street Monkeys', story:`<p>High up on the red brick facade of the former Kildare Street Club — a very grand, very stuffy gentlemen's club built in the 1860s — are carved stone animals engaged in deeply undignified activities. Among them: monkeys playing billiards, a dog reading a newspaper, and a bear playing a stringed instrument.</p><p>Nobody is entirely sure why. The carvings were done by the O'Shea brothers, two Cork stonemasons with a habit of adding their own jokes to buildings. The Kildare Street Club was one of the most snobbish establishments in Victorian Dublin — so the monkeys playing snooker may have been the O'Sheas having the very last laugh.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the carved stone animal decorations on the facade of the former Kildare Street Club building — notably monkeys playing billiards/snooker carved into the red brick building near the National Museum on Kildare Street, Dublin. Does the photo show these animal stone carvings on the building facade? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:17, emoji:'💘', points:25,  riddle:'The actual heart of Saint Valentine', hint:'Go to Whitefriar Street Church on Aungier Street — it\'s inside, in a golden casket.', name:'The Heart of St Valentine', story:`<p>In a small golden casket inside Whitefriar Street Church on Aungier Street lies what the Catholic Church officially recognises as the remains of Saint Valentine — including what is believed to be his actual heart. Yes, really. The heart of the patron saint of love is kept in Dublin, of all places.</p><p>The relics were given to the church in 1836 by Pope Gregory XVI, apparently because a Carmelite priest from Dublin asked very nicely. Valentine was a Roman priest executed around 270 AD for performing secret marriages the Emperor had banned. On 14th February, people come from around the world to leave love notes beside the casket. One of the strangest and most romantic things in Europe.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the golden reliquary casket containing the remains of Saint Valentine inside Whitefriar Street Church on Aungier Street, Dublin — a decorative golden/ornate box or casket in a church setting. Does the photo show the Saint Valentine reliquary/casket in this Dublin church? Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` }
+  ]
+};
+
+// ── EDINBURGH ─────────────────────────────────────────────────────
+CITIES.edinburgh = {
+  label: 'Edinburgh 🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+  mapTitle: '🗺️ Edinburgh Hunt Map',
+  mapState: { zoom: 14, lat: 55.9500, lng: -3.1900, panX: 0, panY: 0 },
+  ranks: [[0,'Newcomer','○○○○○'],[3,'Closes Explorer','●○○○○'],[6,'Royal Mile Regular','●●○○○'],[10,'Greyfriars Ghost','●●●○○'],[14,'Edinburgh Legend!','●●●●●']],
+  locations: [
+    { id:1,  lat:55.94920, lng:-3.19148 },
+    { id:2,  lat:55.94668, lng:-3.19256 },
+    { id:3,  lat:55.95136, lng:-3.20189 },
+    { id:4,  lat:55.95736, lng:-3.18618 },
+    { id:5,  lat:55.95037, lng:-3.18205 },
+    { id:6,  lat:55.97342, lng:-3.19967 },
+    { id:7,  lat:55.94665, lng:-3.19258 },
+    { id:8,  lat:55.95220, lng:-3.18146 },
+    { id:9,  lat:55.94712, lng:-3.19296 },
+    { id:10, lat:55.95123, lng:-3.18425 },
+    { id:11, lat:55.95390, lng:-3.18320 },
+    { id:12, lat:55.94701, lng:-3.19157 },
+    { id:13, lat:55.94907, lng:-3.19283 },
+    { id:14, lat:55.94728, lng:-3.19360 },
+    { id:15, lat:55.94955, lng:-3.19190 },
+    { id:16, lat:55.95231, lng:-3.17673 },
+    { id:17, lat:55.97330, lng:-3.19970 },
+  ],
+  clues: [
+    { id:1,  emoji:'❤️', points:10, riddle:'A heart on the ground that strangers spit on for luck', hint:'Look at the ground outside St Giles\' Cathedral on the Royal Mile.', name:'Heart of Midlothian', story:`<p>The Heart of Midlothian marks the site of the Old Tolbooth — Edinburgh's ancient prison and town hall, demolished in 1817. For centuries it was where criminals were executed, and their severed heads displayed on spikes above the gate. Cheerful stuff!</p><p>Today locals spit on the heart for good luck — a tradition said to ward off the evil spirits of all those who died here. If you haven't already, give it a spit! Just watch out for tourists with cameras.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Heart of Midlothian — a heart-shaped mosaic of dark red and grey cobblestones set into the pavement outside St Giles' Cathedral on the Royal Mile in Edinburgh. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:2,  emoji:'🐕', points:10, riddle:'A small dog with a very shiny nose', hint:'Find Greyfriars Bobby\'s statue at the top of Candlemaker Row, near the kirkyard entrance.', name:'Greyfriars Bobby', story:`<p>Greyfriars Bobby was a Skye Terrier who belonged to Edinburgh policeman John Gray. When Gray died in 1858, Bobby attended his funeral — and then refused to leave his master's grave in Greyfriars Kirkyard for the next fourteen years, until his own death in 1872.</p><p>The loyal little dog became famous across the world. His statue has stood here since 1873, and today tourists queue up to touch his shiny bronze nose for good luck. You can visit his actual grave inside the kirkyard — look for the small headstone near the entrance.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Greyfriars Bobby statue — a small bronze statue of a Skye Terrier dog on a stone plinth at Candlemaker Row in Edinburgh. The dog's nose is famously bright and shiny from being touched by visitors. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:3,  emoji:'🐻', points:15, riddle:'A bear who served in World War II and loved to smoke cigarettes', hint:'Look in West Princes Street Gardens, not far from the Ross Fountain.', name:'Wojtek the Soldier Bear', story:`<p>Wojtek was a real Syrian brown bear cub found in Iran in 1943 and adopted by soldiers of the Polish II Corps. He quickly became their mascot — and much more. Wojtek learned to carry artillery shells, salute officers, and even smoke cigarettes by copying the soldiers around him.</p><p>He fought at the Battle of Monte Cassino in Italy and was officially enlisted as a private in the Polish Army (later promoted to corporal). After the war he retired to Edinburgh Zoo, where he lived until 1963. Polish veterans would visit and toss him cigarettes over the fence, just like old times.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Wojtek the Soldier Bear statue in West Princes Street Gardens, Edinburgh — a large bronze bear alongside a Polish soldier. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:4,  emoji:'🔍', points:10, riddle:'The world\'s greatest detective, standing watch on a busy roundabout', hint:'Head to Picardy Place at the top of Leith Walk.', name:'Sherlock Holmes Statue', story:`<p>Sherlock Holmes never existed — but his creator Arthur Conan Doyle was born just around the corner at 11 Picardy Place in 1859 (sadly the building was demolished). The statue honours Edinburgh's most famous fictional export, who first appeared in print in 1887.</p><p>Conan Doyle based Holmes partly on Dr Joseph Bell, a brilliant Edinburgh surgeon famous for his extraordinary powers of observation. Bell could supposedly tell a patient's occupation, recent travels and habits just by looking at them — a trick Holmes fans will recognise immediately.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the bronze statue of Sherlock Holmes at Picardy Place in Edinburgh — shown in his classic deerstalker hat and cape. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:5,  emoji:'🔩', points:20, riddle:'Metal studs in the road marking the edge of an ancient world', hint:'Look at the road surface at the junction of the Royal Mile and St Mary\'s Street — the Netherbow area.', name:'Netherbow Brass Studs', story:`<p>The Netherbow Port was Edinburgh's most important city gate — the great barrier between the Royal Burgh of Edinburgh and the separate Burgh of Canongate below. For hundreds of years you had to pass through its tall stone archway to enter the city proper. It was demolished in 1764 to ease traffic flow.</p><p>The brass studs in the road mark the exact footprint of the old gateway. This spot has witnessed some of the most dramatic moments in Scottish history — armies marching in, kings riding out, and severed heads being displayed above the gate as a warning to all who entered.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is a set of brass studs or a brass outline embedded in the road surface on the Royal Mile at the Netherbow Port site in Edinburgh, marking the historic city gate. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:6,  emoji:'🐍', points:20, riddle:'A drinking fountain guarded by a coiled bronze serpent', hint:'Look on the wall at Castlehill, very near the top of the Royal Mile by the castle esplanade.', name:'The Witches\' Well', story:`<p>This small iron fountain marks the spot near where over 300 women — and some men — were burned at the stake for witchcraft between 1479 and 1722. Edinburgh was one of the worst places in Europe for witch trials. The accused were often midwives, healers, or simply women who were too outspoken for their neighbours' liking.</p><p>The fountain was installed in 1894 and features a serpent (associated with healing) and a cat's head (a common symbol of witchcraft). The two faces represent the "double aspect" — good and evil — that accusers claimed to see in the accused. It's a small but powerful memorial to a very dark chapter of Scottish history.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Witches' Well — a small ornate iron drinking fountain set into the wall at Castlehill on the Royal Mile in Edinburgh, featuring a bronze snake/serpent and a face. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:7,  emoji:'⚡', points:20, riddle:'The gravestone of a villain whose name you must never speak', hint:'Go into Greyfriars Kirkyard — the stone is near the main path through the graveyard.', name:'Voldemort\'s Grave (Thomas Riddell)', story:`<p>Thomas Riddell died in 1806 and was buried here in Greyfriars Kirkyard. His gravestone was spotted by J.K. Rowling while she was writing Harry Potter — and his name became Tom Marvolo Riddle, the real name of Lord Voldemort. The kirkyard is full of names Rowling borrowed for her characters.</p><p>Look around and you'll spot McGonagall, Moodie, and even a "William McGonagall" nearby. Greyfriars became so famous as a Harry Potter location that Edinburgh council eventually had to put up signs asking visitors to stop leaving fake wands and tribute letters on the graves. Some fans still do anyway.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the gravestone of Thomas Riddell in Greyfriars Kirkyard, Edinburgh — said to have inspired the name Tom Riddle/Voldemort in Harry Potter. The stone reads "Riddell". Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:8,  emoji:'🛁', points:15, riddle:'A bathhouse fit for a queen', hint:'Look at the small turreted stone building at Abbey Strand, right beside the gates of Holyrood Palace.', name:'Queen Mary\'s Bathhouse', story:`<p>This tiny 16th-century building is traditionally said to be the bathhouse of Mary Queen of Scots, who lived in Holyrood Palace next door. Whether she actually bathed here is hotly debated by historians — it may have been a garden lodge or a retreat for her ladies-in-waiting instead.</p><p>Mary Queen of Scots had one of the most dramatic lives in Scottish history. She was crowned Queen of Scotland at just nine months old, married three times, was imprisoned by her own cousin Queen Elizabeth I of England for 19 years, and was finally executed in 1587 at the age of 44. The little tower has survived all of it.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is Queen Mary's Bathhouse — a small, ancient turreted stone building at Abbey Strand beside Holyrood Palace in Edinburgh. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:9,  emoji:'🪽', points:10, riddle:'Wings painted on a wall for anyone who dares to be different', hint:'Look on Candlemaker Row, not far from Greyfriars Bobby.', name:'The Rocketman Wings Mural', story:`<p>Street art has exploded across Edinburgh in recent years, and this wing mural on Candlemaker Row has become one of the most photographed spots in the city. It was inspired by Elton John's famous Rocketman persona and created as part of Edinburgh's growing outdoor art scene.</p><p>The tradition of standing in front of wings to get a photo is now a global phenomenon — there are wing murals in cities from Los Angeles to Seoul. Stand in exactly the right spot and the wings appear perfectly proportioned, as if they really are growing from your shoulders. Go on — you know you want to try it.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is a street mural on Candlemaker Row in Edinburgh showing large colourful painted wings on a wall — the "Never Ordinary" or Rocketman wings mural. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:10, emoji:'🕰️', points:25, riddle:'An old prison with a clock that juts out over the street', hint:'Walk along the lower Royal Mile — Canongate — and look up for a clock sticking out from an old stone building.', name:'Canongate Tolbooth', story:`<p>The Canongate Tolbooth was built in 1591 and served as the council house, courthouse and prison for the Burgh of Canongate — which was a completely separate town from Edinburgh until 1856. Its distinctive clock tower juts out over the pavement so that prisoners inside could hear it strike — a grim reminder of time passing.</p><p>The tolbooth's most colourful chapter involves the "Moor of Morocco" — a Moroccan ambassador's servant who ended up stranded in Edinburgh in the 1600s and was given lodgings in the Canongate. His exotic presence was said to be the talk of the whole city. Today the building houses The People's Story museum, telling the lives of ordinary Edinburgh folk through the centuries.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Canongate Tolbooth on the Royal Mile in Edinburgh — a distinctive 16th-century stone building with a projecting clock tower that sticks out over the pavement, and a turret. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:11, emoji:'🏛️', points:15, riddle:'A temple built for heroes that was never finished', hint:'Climb Calton Hill — you\'ll see the columns near the top.', name:'Scotland\'s Disgrace (Calton Hill)', story:`<p>In 1822, Scotland decided to build a replica of the Parthenon on Calton Hill as a memorial to Scottish soldiers killed in the Napoleonic Wars. Construction began in 1826… and stopped in 1829 when the money ran out after only twelve columns had been built.</p><p>Edinburghers quickly nicknamed it "Scotland's Disgrace" — not because of what it represents, but because the funds dried up so embarrassingly quickly. Despite several attempts to raise money and complete it, the monument has remained unfinished for nearly 200 years. Some people now think the ruin looks more dramatic than a complete building ever would have.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the National Monument of Scotland on Calton Hill — twelve large Greek Doric columns that were meant to be a Parthenon replica but were never finished. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:12, emoji:'🐘', points:10, riddle:'The café window where a boy wizard was born over a cup of coffee', hint:'Look for the elephant sign on George IV Bridge.', name:'The Elephant House Café', story:`<p>J.K. Rowling was a single mother living in Edinburgh in the early 1990s, struggling to make ends meet. She wrote large parts of the first Harry Potter book in local cafés, including The Elephant House on George IV Bridge, which has proudly called itself "the birthplace of Harry Potter" ever since.</p><p>The back window of the café overlooks Greyfriars Kirkyard — the very graveyard full of names that Rowling borrowed for her characters. The toilets have become famous for being covered floor-to-ceiling in handwritten messages from Potter fans visiting from around the world. Some people think this is magical. Others think it's a bit much.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is The Elephant House café on George IV Bridge in Edinburgh — famous as one of the places where J.K. Rowling wrote early Harry Potter chapters. Look for the café sign with an elephant logo. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:13, emoji:'💰', points:20, riddle:'A bronze man who invented the idea of money', hint:'Look on the Royal Mile near St Giles\' Cathedral.', name:'Adam Smith Statue', story:`<p>Adam Smith (1723–1790) was a Scottish philosopher from Kirkcaldy who transformed how the world thinks about economics. His 1776 book "The Wealth of Nations" invented many ideas we take for granted today — like the division of labour, free markets, and why specialisation makes everyone richer. He is often called the "father of modern economics."</p><p>Smith was famously absent-minded. He once walked 15 miles from his house in a daydream before realising where he was. Despite writing the most influential book on wealth ever published, he died leaving very little money — having quietly given most of it away to charity throughout his life.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the statue of Adam Smith on the Royal Mile in Edinburgh — a bronze figure in 18th-century clothing. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:14, emoji:'🦜', points:15, riddle:'A bright brass parrot perched on a colourful curved street', hint:'Walk along Victoria Street in the Old Town and look up at the shopfronts.', name:'The Brass Parrot, Victoria Street', story:`<p>Victoria Street is one of Edinburgh's most photographed streets — a sweeping two-level curve of colourful shopfronts that many people say inspired Diagon Alley in Harry Potter. The brass parrot has kept watch from its shopfront perch for decades, a quirky landmark that most locals walk past without noticing.</p><p>The street was built in the 1830s to replace a jumble of medieval closes and alleyways. At its lower end it connects to the Grassmarket, where public executions were held until 1784. Edinburgh has always had a slightly dark sense of humour about these things.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is a decorative brass or golden parrot mounted on a shopfront on Victoria Street in Edinburgh's Old Town. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:15, emoji:'🫙', points:15, riddle:'An alley so narrow you can touch both walls at the same time', hint:'Look for Advocate\'s Close — it\'s directly off the Royal Mile, opposite St Giles\' Cathedral.', name:"Advocate's Close", story:`<p>Edinburgh's Old Town is riddled with "closes" — narrow alleyways that run off the Royal Mile down the steep sides of the volcanic ridge. In medieval times these closes were packed with multi-storey tenements where thousands of people lived crammed together. Advocate's Close is one of the finest examples, with dramatic steep steps and tall stone walls creating an almost vertical tunnel of history.</p><p>The close is named after Sir James Stewart, Lord Advocate of Scotland in the 17th century, who lived here. At the bottom, the view suddenly opens out to reveal a stunning panorama of Edinburgh's New Town and the Firth of Forth beyond — a classic Edinburgh surprise.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is Advocate's Close — a very narrow stone-walled alleyway with steep steps running off the Royal Mile in Edinburgh. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:16, emoji:'🏗️', points:15, riddle:'A building that looks like someone dropped a box of bricks and just left it', hint:'Walk to the bottom of the Royal Mile — it\'s right next to Holyrood Palace.', name:'The Scottish Parliament', story:`<p>The Scottish Parliament building opened in 2004, designed by the late Catalan architect Enric Miralles. It cost £414 million — over ten times its original budget — and sparked one of Scotland's most heated public debates. Some people think it's a masterpiece. Others think it looks like the aftermath of an explosion in an upturned boat factory.</p><p>Miralles said he drew inspiration from Scotland's landscape, upturned fishing boats, and the paintings of Charles Rennie Mackintosh. Whether you love it or hate it, it is certainly not boring — which is more than can be said for most parliaments.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Scottish Parliament building at Holyrood in Edinburgh — a controversial modernist building with unusual organic shapes and angular stonework. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
+    { id:17, emoji:'🔭', points:10, riddle:'A tower of mirrors that shows you the whole city at once', hint:'Look for the Camera Obscura building at Castlehill, right at the very top of the Royal Mile near the castle.', name:'Camera Obscura Tower', story:`<p>The Camera Obscura has been entertaining Edinburgh visitors since 1853, making it one of the world's oldest visitor attractions. At its heart is a Victorian optical device — a rotating periscope with a lens that projects a live image of the city below onto a white table in a darkened room. It's like watching Edinburgh on a living screen, with tiny real people moving around in real time.</p><p>The tower was originally built as a private home in the 1850s for Maria Theresa Short, one of Edinburgh's first female entrepreneurs, who opened it to the public to show off her collection of optical instruments. From the roof there are some of the finest views over the city in all directions.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Camera Obscura tower on Castlehill at the top of the Royal Mile in Edinburgh — a tall white-rendered building with "Camera Obscura" signage. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` }
+  ]
+};
+
+// ════════════════════════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════════════════════════
+let currentCity = null;
+let foundSet = new Set();
+let totalScore = 0;
+
+function getStorage(city) {
+  return {
+    found: JSON.parse(localStorage.getItem('spotted-'+city+'-found') || '[]'),
+    score: parseInt(localStorage.getItem('spotted-'+city+'-score') || '0')
+  };
+}
+function saveStorage() {
+  localStorage.setItem('spotted-'+currentCity+'-found', JSON.stringify([...foundSet]));
+  localStorage.setItem('spotted-'+currentCity+'-score', totalScore.toString());
+}
+
+// ════════════════════════════════════════════════════════════════
+//  HOME SCREEN
+// ════════════════════════════════════════════════════════════════
+function updateHomeBadges() {
+  ['dublin','edinburgh'].forEach(city => {
+    const data = getStorage(city);
+    const total = CITIES[city].clues.length;
+    const found = data.found.length;
+    const row = document.getElementById(city+'-progress-row');
+    const fill = document.getElementById(city+'-prog-fill');
+    const label = document.getElementById(city+'-prog-label');
+    if (found > 0) {
+      row.style.display = 'flex';
+      fill.style.width = Math.round(found/total*100)+'%';
+      label.textContent = found+'/'+total+' found · '+data.score+' pts';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+}
+
+function startCity(cityKey) {
+  currentCity = cityKey;
+  const city = CITIES[cityKey];
+  const saved = getStorage(cityKey);
+  foundSet = new Set(saved.found);
+  totalScore = saved.score;
+
+  // Reset map
+  mapBuilt = false;
+  mapState = Object.assign({}, city.mapState);
+
+  document.getElementById('cityLabel').textContent = city.label;
+  document.getElementById('mapTitle').textContent = city.mapTitle;
+  document.getElementById('homeScreen').style.display = 'none';
+  document.getElementById('gameScreen').style.display = 'flex';
+
+  buildCards();
+  updateProgress();
+}
+
+function goHome() {
+  document.getElementById('gameScreen').style.display = 'none';
+  document.getElementById('homeScreen').style.display = 'flex';
+  // Reset map container
+  const mc = document.getElementById('mapContainer');
+  mc.innerHTML = '';
+  mapBuilt = false;
+  updateHomeBadges();
+}
+
+// ════════════════════════════════════════════════════════════════
+//  CLUE CARDS
+// ════════════════════════════════════════════════════════════════
+const BAND_COLS = ['#e8192c','#0047FF','#00C853','#FFE000'];
+const BAND_TEXT = ['#FFE000','#FFE000','#0d0d0d','#0d0d0d'];
 
 function buildCards() {
   const list = document.getElementById('cluesList');
+  list.innerHTML = '';
+  const clues = CITIES[currentCity].clues;
   clues.forEach(c => {
     const el = document.createElement('div');
-    el.className = 'clue-card'; el.id = 'card-'+c.id;
+    el.className = 'clue-card' + (foundSet.has(c.id) ? ' found' : '');
+    el.id = 'card-'+c.id;
     el.innerHTML = `
       <div class="clue-top">
         <div class="clue-num">${String(c.id).padStart(2,'0')}</div>
@@ -605,14 +864,18 @@ function buildCards() {
       </div>
       <div class="photo-zone">
         <input type="file" accept="image/*" capture="environment" class="file-input" id="fi-${c.id}" onchange="handlePhoto(event,${c.id})">
-        <button class="camera-btn" id="cb-${c.id}" onclick="document.getElementById('fi-${c.id}').click()">📸 Take a photo to unlock</button>
+        <button class="camera-btn" id="cb-${c.id}" onclick="document.getElementById('fi-${c.id}').click()" ${foundSet.has(c.id)?'disabled':''}>
+          ${foundSet.has(c.id) ? '✅ Spotted!' : '📸 Take a photo to unlock'}
+        </button>
         <img class="photo-preview" id="prev-${c.id}" alt="">
         <div class="scan-status" id="scan-${c.id}"><div class="scan-spinner"></div><span>Checking your photo…</span></div>
         <div class="scan-result" id="res-${c.id}"></div>
       </div>
       <div class="clue-actions">
         <button class="clue-btn" onclick="toggleHint(${c.id})">💡 Hint</button>
-        <button class="clue-btn manual" id="mb-${c.id}" onclick="manualFound(${c.id})">✋ I found it</button>
+        <button class="clue-btn manual" id="mb-${c.id}" onclick="manualFound(${c.id})" ${foundSet.has(c.id)?'disabled':''}>
+          ${foundSet.has(c.id) ? '✓ Done' : '✋ I found it'}
+        </button>
       </div>`;
     list.appendChild(el);
   });
@@ -644,7 +907,7 @@ function toB64(file) {
 }
 
 async function askClaude(id, b64, mt) {
-  const c = clues.find(x => x.id===id);
+  const c = CITIES[currentCity].clues.find(x => x.id===id);
   const r = await fetch('/api/verify', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -678,8 +941,9 @@ function manualFound(id) { if (!foundSet.has(id)) markFound(id, null); }
 
 function markFound(id, aiMsg) {
   if (foundSet.has(id)) return;
-  const c = clues.find(x => x.id===id);
+  const c = CITIES[currentCity].clues.find(x => x.id===id);
   foundSet.add(id); totalScore += c.points;
+  saveStorage();
   document.getElementById('card-'+id).classList.add('found');
   const cb = document.getElementById('cb-'+id); cb.disabled = true; cb.textContent = '✅ Spotted!';
   const mb = document.getElementById('mb-'+id); mb.disabled = true; mb.textContent = '✓ Done';
@@ -688,17 +952,23 @@ function markFound(id, aiMsg) {
 }
 
 function updateProgress() {
-  const pct = Math.round((foundSet.size/totalCards)*100);
+  const clues = CITIES[currentCity].clues;
+  const total = clues.length;
+  const pct = Math.round((foundSet.size/total)*100);
   document.getElementById('progFill').style.width = pct+'%';
-  document.getElementById('progCount').textContent = foundSet.size+'/'+totalCards;
+  document.getElementById('progCount').textContent = foundSet.size+'/'+total;
   document.getElementById('scoreDisplay').textContent = totalScore;
-  document.getElementById('leftCount').textContent = (totalCards-foundSet.size)+' to find';
-  const ranks = [[0,'Newcomer','○○○○○'],[3,'Scout','●○○○○'],[6,'Explorer','●●○○○'],[9,'Adventurer','●●●○○'],[13,'City Hunter','●●●●○'],[17,'Dublin Legend!','●●●●●']];
-  let r = ranks[0]; for (const row of ranks) { if (foundSet.size>=row[0]) r = row; }
+  document.getElementById('leftCount').textContent = (total-foundSet.size)+' to find';
+  const ranks = CITIES[currentCity].ranks;
+  let r = ranks[0];
+  for (const row of ranks) { if (foundSet.size>=row[0]) r = row; }
   document.getElementById('rankLabel').textContent = r[1];
   document.getElementById('rankStars').textContent = r[2];
 }
 
+// ════════════════════════════════════════════════════════════════
+//  CELEBRATION
+// ════════════════════════════════════════════════════════════════
 function celebrate(c, aiMsg) {
   const idx = (c.id-1) % BAND_COLS.length;
   const bg = BAND_COLS[idx], fg = BAND_TEXT[idx];
@@ -713,8 +983,6 @@ function celebrate(c, aiMsg) {
   const ai = document.getElementById('celebAi');
   if (aiMsg) { ai.textContent = '"'+aiMsg+'"'; ai.style.display='block'; } else { ai.style.display='none'; }
   document.getElementById('celebSheet').scrollTop = 0;
-
-  // confetti
   const cols = ['#e8192c','#0047FF','#FFE000','#00C853','#ffffff'];
   for (let i = 0; i < 44; i++) {
     const d = document.createElement('div'); d.className = 'confetti-dot';
@@ -724,50 +992,19 @@ function celebrate(c, aiMsg) {
   }
   document.getElementById('celebration').classList.add('show');
 }
-
 function closeCelebration() { document.getElementById('celebration').classList.remove('show'); }
 function handleCelebClick(e) { if (e.target===document.getElementById('celebration')) closeCelebration(); }
 
-buildCards(); updateProgress();
-
-// ── MAP ───────────────────────────────────────────────────────
-const clueLocations = [
-  { id:1,  name:"Molly Malone",          lat:53.34355, lng:-6.26104 }, // Suffolk St at St Andrew's Church / top of Andrew St
-  { id:2,  name:"The Spire",             lat:53.34979, lng:-6.26023 }, // O'Connell Street centre
-  { id:3,  name:"Giant Woodlouse",       lat:53.34021, lng:-6.25221 }, // Natural History Museum, Merrion St Upper
-  { id:4,  name:"Georgian Doors",        lat:53.33870, lng:-6.25330 }, // Merrion Square West
-  { id:5,  name:"Famine Memorial",       lat:53.34876, lng:-6.24558 }, // Custom House Quay, north bank
-  { id:6,  name:"Riderless Horse",       lat:53.34451, lng:-6.25939 }, // College Green, Bank of Ireland
-  { id:7,  name:"Singing Poles",         lat:53.34543, lng:-6.26572 }, // Meeting House Square, Temple Bar
-  { id:8,  name:"Busker Statue",         lat:53.34601, lng:-6.26742 }, // Merchant's Arch, south of Ha'penny
-  { id:9,  name:"Book Stalls",           lat:53.34297, lng:-6.25808 }, // Nassau Street, beside Trinity wall
-  { id:10, name:"Hungry Tree",           lat:53.35201, lng:-6.27366 }, // King's Inns Park, Constitution Hill
-  { id:11, name:"Shelbourne Princesses", lat:53.33890, lng:-6.25610 }, // Shelbourne Hotel, St Stephen's Green N
-  { id:12, name:"Wall of Hearts",        lat:53.34537, lng:-6.26477 }, // Love Lane, off Eustace St, Temple Bar
-  { id:13, name:"Beckett Bridge",        lat:53.34785, lng:-6.23948 }, // River Liffey at Guild Street / Docklands
-  { id:14, name:"Oscar Wilde",           lat:53.34080, lng:-6.25062 }, // NW corner of Merrion Square Park
-  { id:15, name:"Bullet Holes",          lat:53.34836, lng:-6.25974 }, // O'Connell Monument, foot of O'Connell St
-  { id:16, name:"Kildare St Monkeys",    lat:53.34059, lng:-6.25435 }, // 1-2 Kildare Street, beside Leinster House
-  { id:17, name:"St Valentine's Heart", lat:53.33988, lng:-6.26674 }, // Whitefriar Street Church, 56 Aungier St
-];
-
+// ════════════════════════════════════════════════════════════════
+//  MAP  (identical tile engine to Dublin original)
+// ════════════════════════════════════════════════════════════════
 var mapBuilt = false;
-
-// ── Map state ─────────────────────────────────────────────────
-var mapState = {
-  // Start at zoom 13 so all 17 pins including Beckett Bridge fit
-  zoom: 13,
-  // Centre slightly east to include the Docklands
-  lat: 53.343,
-  lng: -6.256,
-  panX: 0,   // accumulated pan offset in pixels
-  panY: 0
-};
+var mapState = { zoom:13, lat:53.343, lng:-6.256, panX:0, panY:0 };
 var TILE = 256;
+var mapContainer, mapTileDiv, mapSvg, mapW, mapH;
 
-// ── Projection helpers ────────────────────────────────────────
-function gx(lng, z){ return (lng+180)/360 * Math.pow(2,z) * TILE; }
-function gy(lat, z){
+function gx(lng,z){ return (lng+180)/360 * Math.pow(2,z) * TILE; }
+function gy(lat,z){
   var s = Math.sin(lat*Math.PI/180);
   return (0.5 - Math.log((1+s)/(1-s))/(4*Math.PI)) * Math.pow(2,z) * TILE;
 }
@@ -776,86 +1013,60 @@ function toTileY(lat,z){
   var r=lat*Math.PI/180;
   return Math.floor((1 - Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*Math.pow(2,z));
 }
-
-// Convert lat/lng → pixel on screen given current map state
-function latLngToScreen(lat, lng, W, H){
+function latLngToScreen(lat,lng,W,H){
   return {
     px: W/2 + gx(lng,mapState.zoom) - gx(mapState.lng,mapState.zoom) + mapState.panX,
     py: H/2 + gy(lat,mapState.zoom) - gy(mapState.lat,mapState.zoom) + mapState.panY
   };
 }
 
-// ── DOM references (set on first open) ───────────────────────
-var mapContainer, mapTileDiv, mapSvg, mapW, mapH;
-
 function openMap(){
   document.getElementById('mapModal').classList.add('open');
   if(mapBuilt){ return; }
   mapBuilt = true;
-
   mapContainer = document.getElementById('mapContainer');
   mapW = mapContainer.offsetWidth || 360;
   mapH = 380;
-
-  // Tile layer
   mapTileDiv = document.createElement('div');
   mapTileDiv.style.cssText = 'position:absolute;inset:0;overflow:hidden;background:#e8e4dc;';
   mapContainer.appendChild(mapTileDiv);
-
-  // SVG pin layer
   mapSvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
   mapSvg.setAttribute('width', mapW);
   mapSvg.setAttribute('height', mapH);
   mapSvg.style.cssText = 'position:absolute;top:0;left:0;pointer-events:none;overflow:hidden;';
   mapContainer.appendChild(mapSvg);
-
-  // OSM attribution
   var attr = document.createElement('div');
   attr.innerHTML = '© <a href="https://www.openstreetmap.org/copyright" target="_blank" style="color:#0047FF">OpenStreetMap</a>';
   attr.style.cssText = 'position:absolute;bottom:4px;right:6px;font-size:9px;background:rgba(255,255,255,0.7);padding:1px 4px;border-radius:3px;z-index:10;';
   mapContainer.appendChild(attr);
-
-  // Touch/mouse pan
   setupPan(mapContainer);
-
   redrawMap();
 }
 
 function redrawMap(){
-  // Clear tiles
   mapTileDiv.innerHTML = '';
-  // Clear SVG pins entirely and reset dimensions
   while(mapSvg.firstChild) mapSvg.removeChild(mapSvg.firstChild);
   mapSvg.setAttribute('width', mapW);
   mapSvg.setAttribute('height', mapH);
 
-  // Define a clipPath so pins are hard-clipped to the map rectangle
   var defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
   var clip = document.createElementNS('http://www.w3.org/2000/svg','clipPath');
   clip.setAttribute('id','mapClip');
   var clipRect = document.createElementNS('http://www.w3.org/2000/svg','rect');
   clipRect.setAttribute('x','0'); clipRect.setAttribute('y','0');
   clipRect.setAttribute('width', mapW); clipRect.setAttribute('height', mapH);
-  clip.appendChild(clipRect);
-  defs.appendChild(clip);
-  mapSvg.appendChild(defs);
+  clip.appendChild(clipRect); defs.appendChild(clip); mapSvg.appendChild(defs);
 
-  // All pins go inside this group which is clipped
   var pinGroup = document.createElementNS('http://www.w3.org/2000/svg','g');
   pinGroup.setAttribute('clip-path','url(#mapClip)');
   mapSvg.appendChild(pinGroup);
 
-  var z = Math.round(mapState.zoom); // integer for tile URLs
+  var z = Math.round(mapState.zoom);
   var W = mapW, H = mapH;
-
-  // Centre tile coords
   var ctX = toTileX(mapState.lng, z);
   var ctY = toTileY(mapState.lat, z);
-
-  // Pixel offset of top-left of centre tile from canvas centre (plus pan)
   var tileOffX = W/2 - (gx(mapState.lng,z) - ctX*TILE) + mapState.panX;
   var tileOffY = H/2 - (gy(mapState.lat,z) - ctY*TILE) + mapState.panY;
-
   var rx = Math.ceil(W/TILE/2) + 2;
   var ry = Math.ceil(H/TILE/2) + 2;
 
@@ -866,7 +1077,6 @@ function redrawMap(){
       var py = Math.round(tileOffY + dy*TILE);
       if(px+TILE<0||px>W||py+TILE<0||py>H) continue;
       if(ty<0||ty>=Math.pow(2,z)) continue;
-
       var img = document.createElement('img');
       img.style.cssText='position:absolute;left:'+px+'px;top:'+py+'px;width:'+TILE+'px;height:'+TILE+'px;display:block;';
       var sub=['a','b','c'][Math.abs(tx+ty)%3];
@@ -876,108 +1086,72 @@ function redrawMap(){
     }
   }
 
-  // Draw pins — only draw if pin centre is within the map bounds (with margin)
-  var PIN_R = 14; // pin radius + a little margin
-  clueLocations.forEach(function(loc){
+  var PIN_R = 14;
+  var locations = CITIES[currentCity].locations;
+  locations.forEach(function(loc){
     var p = latLngToScreen(loc.lat, loc.lng, W, H);
     var px=Math.round(p.px), py=Math.round(p.py);
-
-    // Skip if pin centre is outside the visible map area
     if(px < -PIN_R || px > W+PIN_R || py < -PIN_R || py > H+PIN_R) return;
-
+    var isFound = foundSet.has(loc.id);
     var sh=document.createElementNS('http://www.w3.org/2000/svg','circle');
     sh.setAttribute('cx',px+2); sh.setAttribute('cy',py+2);
     sh.setAttribute('r','12'); sh.setAttribute('fill','#0d0d0d');
     pinGroup.appendChild(sh);
-
     var ci=document.createElementNS('http://www.w3.org/2000/svg','circle');
     ci.setAttribute('cx',px); ci.setAttribute('cy',py);
     ci.setAttribute('r','12');
-    ci.setAttribute('fill','#e8192c');
+    ci.setAttribute('fill', isFound ? '#00C853' : '#e8192c');
     ci.setAttribute('stroke','#0d0d0d');
     ci.setAttribute('stroke-width','2');
     pinGroup.appendChild(ci);
-
     var num=document.createElementNS('http://www.w3.org/2000/svg','text');
     num.setAttribute('x',px); num.setAttribute('y',py+4);
     num.setAttribute('text-anchor','middle');
     num.setAttribute('font-family','Arial,sans-serif');
     num.setAttribute('font-size', loc.id>=10?'9':'11');
     num.setAttribute('font-weight','900');
-    num.setAttribute('fill','#FFE000');
-    num.textContent = loc.id;
+    num.setAttribute('fill', isFound ? '#0d0d0d' : '#FFE000');
+    num.textContent = isFound ? '✓' : loc.id;
     pinGroup.appendChild(num);
   });
 }
 
-// ── Pan support (touch + mouse) ───────────────────────────────
 function setupPan(el){
   var dragging=false, lastX=0, lastY=0;
+  el.addEventListener('mousedown',function(e){ dragging=true; lastX=e.clientX; lastY=e.clientY; el.style.cursor='grabbing'; });
+  window.addEventListener('mousemove',function(e){ if(!dragging) return; mapState.panX+=e.clientX-lastX; mapState.panY+=e.clientY-lastY; lastX=e.clientX; lastY=e.clientY; redrawMap(); });
+  window.addEventListener('mouseup',function(){ dragging=false; el.style.cursor='grab'; });
 
-  el.addEventListener('mousedown',function(e){
-    dragging=true; lastX=e.clientX; lastY=e.clientY;
-    el.style.cursor='grabbing';
-  });
-  window.addEventListener('mousemove',function(e){
-    if(!dragging) return;
-    mapState.panX += e.clientX-lastX;
-    mapState.panY += e.clientY-lastY;
-    lastX=e.clientX; lastY=e.clientY;
-    redrawMap();
-  });
-  window.addEventListener('mouseup',function(){
-    dragging=false; el.style.cursor='grab';
-  });
-
-  // ── Smooth touch pan + pinch zoom ──────────────────────────
-  // Continuous fractional zoom — no threshold jumps.
-  // RAF batches redraws so the UI never blocks.
   var t1x=0,t1y=0,t2x=0,t2y=0,lastDist=0,touchCount=0,rafPending=false;
-
-  function scheduleRedraw(){
-    if(rafPending) return;
-    rafPending=true;
-    requestAnimationFrame(function(){ rafPending=false; redrawMap(); });
-  }
+  function scheduleRedraw(){ if(rafPending) return; rafPending=true; requestAnimationFrame(function(){ rafPending=false; redrawMap(); }); }
 
   el.addEventListener('touchstart',function(e){
-    e.preventDefault();
-    touchCount=e.touches.length;
+    e.preventDefault(); touchCount=e.touches.length;
     t1x=e.touches[0].clientX; t1y=e.touches[0].clientY;
-    if(touchCount>=2){
-      t2x=e.touches[1].clientX; t2y=e.touches[1].clientY;
-      lastDist=Math.hypot(t2x-t1x,t2y-t1y);
-    }
+    if(touchCount>=2){ t2x=e.touches[1].clientX; t2y=e.touches[1].clientY; lastDist=Math.hypot(t2x-t1x,t2y-t1y); }
   },{passive:false});
 
   el.addEventListener('touchmove',function(e){
-    e.preventDefault();
-    touchCount=e.touches.length;
+    e.preventDefault(); touchCount=e.touches.length;
     if(touchCount===1){
       var nx=e.touches[0].clientX, ny=e.touches[0].clientY;
-      mapState.panX+=nx-t1x; mapState.panY+=ny-t1y;
-      t1x=nx; t1y=ny;
-      scheduleRedraw();
+      mapState.panX+=nx-t1x; mapState.panY+=ny-t1y; t1x=nx; t1y=ny; scheduleRedraw();
     } else if(touchCount>=2){
       var nx1=e.touches[0].clientX,ny1=e.touches[0].clientY;
       var nx2=e.touches[1].clientX,ny2=e.touches[1].clientY;
       var newDist=Math.hypot(nx2-nx1,ny2-ny1);
-      // Pan with midpoint
       var midX=(nx1+nx2)/2, midY=(ny1+ny2)/2;
       var oldMidX=(t1x+t2x)/2, oldMidY=(t1y+t2y)/2;
       mapState.panX+=midX-oldMidX; mapState.panY+=midY-oldMidY;
-      // Continuous zoom towards pinch centre
       if(lastDist>0 && newDist>0){
         var newZoom=Math.min(17,Math.max(10,mapState.zoom+Math.log2(newDist/lastDist)));
         var rect=el.getBoundingClientRect();
         var cx=midX-rect.left-mapW/2, cy=midY-rect.top-mapH/2;
         var scale=Math.pow(2,newZoom-mapState.zoom);
-        mapState.panX=cx+(mapState.panX-cx)*scale;
-        mapState.panY=cy+(mapState.panY-cy)*scale;
+        mapState.panX=cx+(mapState.panX-cx)*scale; mapState.panY=cy+(mapState.panY-cy)*scale;
         mapState.zoom=newZoom;
       }
-      t1x=nx1;t1y=ny1;t2x=nx2;t2y=ny2;lastDist=newDist;
-      scheduleRedraw();
+      t1x=nx1;t1y=ny1;t2x=nx2;t2y=ny2;lastDist=newDist; scheduleRedraw();
     }
   },{passive:false});
 
@@ -985,18 +1159,16 @@ function setupPan(el){
     touchCount=e.touches.length;
     if(touchCount===1){ t1x=e.touches[0].clientX; t1y=e.touches[0].clientY; lastDist=0; }
   },{passive:false});
-
   el.style.cursor='grab';
 }
 
-function closeMap() {
-  document.getElementById('mapModal').classList.remove('open');
-}
+function closeMap() { document.getElementById('mapModal').classList.remove('open'); }
+function handleMapClick(e) { if(e.target===document.getElementById('mapModal')) closeMap(); }
 
-function handleMapClick(e) {
-  if (e.target === document.getElementById('mapModal')) closeMap();
-}
-
+// ════════════════════════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════════════════════════
+updateHomeBadges();
 </script>
 </body>
 </html>
