@@ -724,26 +724,26 @@ CITIES.dublin = {
 CITIES.edinburgh = {
   label: 'Edinburgh 🏴󠁧󠁢󠁳󠁣󠁴󠁿',
   mapTitle: '🗺️ Edinburgh Hunt Map',
-  mapState: { zoom: 14, lat: 55.9500, lng: -3.1900, panX: 0, panY: 0 },
+  mapState: { zoom: 14, lat: 55.9499, lng: -3.1890, panX: 0, panY: 0 },
   ranks: [[0,'Newcomer','○○○○○'],[3,'Closes Explorer','●○○○○'],[6,'Royal Mile Regular','●●○○○'],[10,'Greyfriars Ghost','●●●○○'],[14,'Edinburgh Legend!','●●●●●']],
   locations: [
-    { id:1,  lat:55.94920, lng:-3.19148 },
-    { id:2,  lat:55.94668, lng:-3.19256 },
-    { id:3,  lat:55.95136, lng:-3.20189 },
-    { id:4,  lat:55.95736, lng:-3.18618 },
-    { id:5,  lat:55.95037, lng:-3.18205 },
-    { id:6,  lat:55.97342, lng:-3.19967 },
-    { id:7,  lat:55.94665, lng:-3.19258 },
-    { id:8,  lat:55.95220, lng:-3.18146 },
-    { id:9,  lat:55.94712, lng:-3.19296 },
-    { id:10, lat:55.95123, lng:-3.18425 },
-    { id:11, lat:55.95390, lng:-3.18320 },
-    { id:12, lat:55.94701, lng:-3.19157 },
-    { id:13, lat:55.94907, lng:-3.19283 },
-    { id:14, lat:55.94728, lng:-3.19360 },
-    { id:15, lat:55.94955, lng:-3.19190 },
-    { id:16, lat:55.95231, lng:-3.17673 },
-    { id:17, lat:55.97330, lng:-3.19970 },
+    { id:1,  lat:55.94916, lng:-3.19197 }, // Heart of Midlothian
+    { id:2,  lat:55.94686, lng:-3.19158 }, // Greyfriars Bobby
+    { id:3,  lat:55.95101, lng:-3.20170 }, // Wojtek Bear
+    { id:4,  lat:55.95740, lng:-3.18625 }, // Sherlock Holmes
+    { id:5,  lat:55.95038, lng:-3.18215 }, // Netherbow Brass Studs
+    { id:6,  lat:55.94975, lng:-3.19934 }, // Witches Well — Castlehill
+    { id:7,  lat:55.94660, lng:-3.19220 }, // Thomas Riddell grave
+    { id:8,  lat:55.95229, lng:-3.17420 }, // Queen Mary's Bathhouse
+    { id:9,  lat:55.94718, lng:-3.19155 }, // Rocketman Wings mural
+    { id:10, lat:55.95105, lng:-3.18385 }, // Canongate Tolbooth
+    { id:11, lat:55.95381, lng:-3.18260 }, // National Monument Calton Hill
+    { id:12, lat:55.94703, lng:-3.19097 }, // Elephant House
+    { id:13, lat:55.94897, lng:-3.19295 }, // Adam Smith statue
+    { id:14, lat:55.94740, lng:-3.19375 }, // Brass Parrot Victoria St
+    { id:15, lat:55.94963, lng:-3.19168 }, // Advocate's Close
+    { id:16, lat:55.95238, lng:-3.17518 }, // Scottish Parliament
+    { id:17, lat:55.94974, lng:-3.19981 }, // Camera Obscura — Castlehill
   ],
   clues: [
     { id:1,  emoji:'❤️', points:10, riddle:'A heart on the ground that strangers spit on for luck', hint:'Look at the ground outside St Giles\' Cathedral on the Royal Mile.', name:'Heart of Midlothian', story:`<p>The Heart of Midlothian marks the site of the Old Tolbooth — Edinburgh's ancient prison and town hall, demolished in 1817. For centuries it was where criminals were executed, and their severed heads displayed on spikes above the gate. Cheerful stuff!</p><p>Today locals spit on the heart for good luck — a tradition said to ward off the evil spirits of all those who died here. If you haven't already, give it a spit! Just watch out for tourists with cameras.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Heart of Midlothian — a heart-shaped mosaic of dark red and grey cobblestones set into the pavement outside St Giles' Cathedral on the Royal Mile in Edinburgh. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
@@ -1014,9 +1014,10 @@ function toTileY(lat,z){
   return Math.floor((1 - Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*Math.pow(2,z));
 }
 function latLngToScreen(lat,lng,W,H){
+  var z = Math.round(mapState.zoom); // use same integer zoom as tile URLs to prevent drift
   return {
-    px: W/2 + gx(lng,mapState.zoom) - gx(mapState.lng,mapState.zoom) + mapState.panX,
-    py: H/2 + gy(lat,mapState.zoom) - gy(mapState.lat,mapState.zoom) + mapState.panY
+    px: W/2 + gx(lng,z) - gx(mapState.lng,z) + mapState.panX,
+    py: H/2 + gy(lat,z) - gy(mapState.lat,z) + mapState.panY
   };
 }
 
