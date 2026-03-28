@@ -727,23 +727,23 @@ CITIES.edinburgh = {
   mapState: { zoom: 14, lat: 55.9499, lng: -3.1890, panX: 0, panY: 0 },
   ranks: [[0,'Newcomer','○○○○○'],[3,'Closes Explorer','●○○○○'],[6,'Royal Mile Regular','●●○○○'],[10,'Greyfriars Ghost','●●●○○'],[14,'Edinburgh Legend!','●●●●●']],
   locations: [
-    { id:1,  lat:55.94916, lng:-3.19197 }, // Heart of Midlothian
-    { id:2,  lat:55.94686, lng:-3.19158 }, // Greyfriars Bobby
-    { id:3,  lat:55.95101, lng:-3.20170 }, // Wojtek Bear
-    { id:4,  lat:55.95740, lng:-3.18625 }, // Sherlock Holmes
-    { id:5,  lat:55.95038, lng:-3.18215 }, // Netherbow Brass Studs
-    { id:6,  lat:55.94975, lng:-3.19934 }, // Witches Well — Castlehill
-    { id:7,  lat:55.94660, lng:-3.19220 }, // Thomas Riddell grave
-    { id:8,  lat:55.95229, lng:-3.17420 }, // Queen Mary's Bathhouse
-    { id:9,  lat:55.94718, lng:-3.19155 }, // Rocketman Wings mural
-    { id:10, lat:55.95105, lng:-3.18385 }, // Canongate Tolbooth
-    { id:11, lat:55.95381, lng:-3.18260 }, // National Monument Calton Hill
-    { id:12, lat:55.94703, lng:-3.19097 }, // Elephant House
-    { id:13, lat:55.94897, lng:-3.19295 }, // Adam Smith statue
-    { id:14, lat:55.94740, lng:-3.19375 }, // Brass Parrot Victoria St
-    { id:15, lat:55.94963, lng:-3.19168 }, // Advocate's Close
-    { id:16, lat:55.95238, lng:-3.17518 }, // Scottish Parliament
-    { id:17, lat:55.94974, lng:-3.19981 }, // Camera Obscura — Castlehill
+    { id:1,  lat:55.9496834, lng:-3.1915960 }, // Heart of Midlothian
+    { id:2,  lat:55.9470469, lng:-3.1913094 }, // Greyfriars Bobby
+    { id:3,  lat:55.9509252, lng:-3.2020999 }, // Wojtek Bear
+    { id:4,  lat:55.9566651, lng:-3.1868683 }, // Sherlock Holmes
+    { id:5,  lat:55.9506070, lng:-3.1841831 }, // Netherbow Brass Studs
+    { id:6,  lat:55.9490463, lng:-3.1963932 }, // Witches Well
+    { id:7,  lat:55.9470416, lng:-3.1935940 }, // Thomas Riddell grave
+    { id:8,  lat:55.9535530, lng:-3.1741771 }, // Queen Mary's Bathhouse
+    { id:9,  lat:55.9474355, lng:-3.1921613 }, // Rocketman Wings mural
+    { id:10, lat:55.9514918, lng:-3.1798393 }, // Canongate Tolbooth
+    { id:11, lat:55.9547964, lng:-3.1818915 }, // National Monument Calton Hill
+    { id:12, lat:55.9476033, lng:-3.1917828 }, // Elephant House
+    { id:13, lat:55.9498717, lng:-3.1899421 }, // Adam Smith statue
+    { id:14, lat:55.9487746, lng:-3.1931802 }, // Brass Parrot Victoria St
+    { id:15, lat:55.9498383, lng:-3.1912564 }, // Advocate's Close
+    { id:16, lat:55.9523141, lng:-3.1748631 }, // Scottish Parliament
+    { id:17, lat:55.9489811, lng:-3.1956596 }, // Camera Obscura
   ],
   clues: [
     { id:1,  emoji:'❤️', points:10, riddle:'A heart on the ground that strangers spit on for luck', hint:'Look at the ground outside St Giles\' Cathedral on the Royal Mile.', name:'Heart of Midlothian', story:`<p>The Heart of Midlothian marks the site of the Old Tolbooth — Edinburgh's ancient prison and town hall, demolished in 1817. For centuries it was where criminals were executed, and their severed heads displayed on spikes above the gate. Cheerful stuff!</p><p>Today locals spit on the heart for good luck — a tradition said to ward off the evil spirits of all those who died here. If you haven't already, give it a spit! Just watch out for tourists with cameras.</p>`, visionPrompt:`You are verifying a photo for a children's city treasure hunt. The target is the Heart of Midlothian — a heart-shaped mosaic of dark red and grey cobblestones set into the pavement outside St Giles' Cathedral on the Royal Mile in Edinburgh. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A short fun line for a child (max 15 words). If wrong, a playful nudge."}` },
@@ -1001,7 +1001,7 @@ function handleCelebClick(e) { if (e.target===document.getElementById('celebrati
 var mapBuilt = false;
 var mapState = { zoom:13, lat:53.343, lng:-6.256, panX:0, panY:0 };
 var TILE = 256;
-var mapContainer, mapTileDiv, mapSvg, mapW, mapH;
+var mapContainer, mapW, mapH;
 
 function gx(lng,z){ return (lng+180)/360 * Math.pow(2,z) * TILE; }
 function gy(lat,z){
@@ -1013,153 +1013,262 @@ function toTileY(lat,z){
   var r=lat*Math.PI/180;
   return Math.floor((1 - Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*Math.pow(2,z));
 }
+// ── Smooth map engine ────────────────────────────────────────────
+// Strategy: tiles are placed on a large canvas div anchored to a
+// world-pixel origin. Panning just CSS-transforms that div — no DOM
+// rebuild. Tiles are only created/removed when zoom changes or the
+// viewport drifts far enough to need new ones.
+
+var tileLayer, pinLayer, tileCache={}, tileOriginX=0, tileOriginY=0;
+var mapZ = 0; // last integer zoom tiles were built at
+
+function worldPx(lat,lng,z){
+  // pixel coordinates in the full Mercator world at zoom z
+  var n = Math.pow(2,z);
+  var x = (lng+180)/360 * n * TILE;
+  var s = Math.sin(lat*Math.PI/180);
+  var y = (0.5 - Math.log((1+s)/(1-s))/(4*Math.PI)) * n * TILE;
+  return {x:x, y:y};
+}
+
 function latLngToScreen(lat,lng,W,H){
-  var z = Math.round(mapState.zoom); // use same integer zoom as tile URLs to prevent drift
+  var z = Math.round(mapState.zoom);
+  var c = worldPx(mapState.lat, mapState.lng, z);
+  var p = worldPx(lat, lng, z);
   return {
-    px: W/2 + gx(lng,z) - gx(mapState.lng,z) + mapState.panX,
-    py: H/2 + gy(lat,z) - gy(mapState.lat,z) + mapState.panY
+    px: W/2 + (p.x - c.x) + mapState.panX,
+    py: H/2 + (p.y - c.y) + mapState.panY
   };
 }
 
 function openMap(){
   document.getElementById('mapModal').classList.add('open');
-  if(mapBuilt){ return; }
+  if(mapBuilt){ rafDraw(); return; }
   mapBuilt = true;
+
   mapContainer = document.getElementById('mapContainer');
   mapW = mapContainer.offsetWidth || 360;
   mapH = 380;
-  mapTileDiv = document.createElement('div');
-  mapTileDiv.style.cssText = 'position:absolute;inset:0;overflow:hidden;background:#e8e4dc;';
-  mapContainer.appendChild(mapTileDiv);
-  mapSvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-  mapSvg.setAttribute('width', mapW);
-  mapSvg.setAttribute('height', mapH);
-  mapSvg.style.cssText = 'position:absolute;top:0;left:0;pointer-events:none;overflow:hidden;';
-  mapContainer.appendChild(mapSvg);
+  mapContainer.style.cssText += 'overflow:hidden;background:#e8e4dc;touch-action:none;';
+
+  // Tile layer — oversized, moved with CSS transform
+  tileLayer = document.createElement('div');
+  tileLayer.style.cssText = 'position:absolute;top:0;left:0;will-change:transform;';
+  mapContainer.appendChild(tileLayer);
+
+  // SVG pin layer on top
+  pinLayer = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  pinLayer.style.cssText = 'position:absolute;top:0;left:0;pointer-events:none;overflow:visible;will-change:transform;';
+  pinLayer.setAttribute('width', mapW);
+  pinLayer.setAttribute('height', mapH);
+  mapContainer.appendChild(pinLayer);
+
   var attr = document.createElement('div');
   attr.innerHTML = '© <a href="https://www.openstreetmap.org/copyright" target="_blank" style="color:#0047FF">OpenStreetMap</a>';
-  attr.style.cssText = 'position:absolute;bottom:4px;right:6px;font-size:9px;background:rgba(255,255,255,0.7);padding:1px 4px;border-radius:3px;z-index:10;';
+  attr.style.cssText = 'position:absolute;bottom:4px;right:6px;font-size:9px;background:rgba(255,255,255,0.7);padding:1px 4px;border-radius:3px;z-index:10;pointer-events:none;';
   mapContainer.appendChild(attr);
+
   setupPan(mapContainer);
-  redrawMap();
+  buildTiles();
+  rafDraw();
 }
 
-function redrawMap(){
-  mapTileDiv.innerHTML = '';
-  while(mapSvg.firstChild) mapSvg.removeChild(mapSvg.firstChild);
-  mapSvg.setAttribute('width', mapW);
-  mapSvg.setAttribute('height', mapH);
+function buildTiles(){
+  var z = Math.round(mapState.zoom);
+  if(z === mapZ && tileLayer.children.length > 0) return; // already built for this zoom
+  mapZ = z;
+  tileCache = {};
+  tileLayer.innerHTML = '';
+
+  // Anchor the tile layer at world pixel (0,0) for zoom z,
+  // then use CSS transform to position it under the viewport.
+  tileOriginX = 0;
+  tileOriginY = 0;
+
+  var maxTile = Math.pow(2,z) - 1;
+  var c = worldPx(mapState.lat, mapState.lng, z);
+  // range of tiles to pre-load around centre
+  var rx = Math.ceil(mapW/TILE/2) + 3;
+  var ry = Math.ceil(mapH/TILE/2) + 3;
+  var cTx = Math.floor(c.x/TILE);
+  var cTy = Math.floor(c.y/TILE);
+
+  for(var tx=cTx-rx; tx<=cTx+rx; tx++){
+    for(var ty=cTy-ry; ty<=cTy+ry; ty++){
+      if(ty<0||ty>maxTile) continue;
+      var wtx = ((tx % Math.pow(2,z)) + Math.pow(2,z)) % Math.pow(2,z);
+      var key = z+'/'+wtx+'/'+ty;
+      if(tileCache[key]) continue;
+      tileCache[key] = true;
+      var img = document.createElement('img');
+      img.style.cssText = 'position:absolute;left:'+(tx*TILE)+'px;top:'+(ty*TILE)+'px;width:'+TILE+'px;height:'+TILE+'px;display:block;image-rendering:auto;';
+      var sub = ['a','b','c'][Math.abs(wtx+ty)%3];
+      img.src = 'https://'+sub+'.tile.openstreetmap.org/'+key+'.png';
+      img.alt = '';
+      tileLayer.appendChild(img);
+    }
+  }
+}
+
+var rafId = null;
+function rafDraw(){
+  if(rafId) return;
+  rafId = requestAnimationFrame(function(){
+    rafId = null;
+    applyTransforms();
+  });
+}
+
+function applyTransforms(){
+  var z = Math.round(mapState.zoom);
+  // Rebuild tiles if zoom changed
+  if(z !== mapZ) buildTiles();
+
+  var c = worldPx(mapState.lat, mapState.lng, z);
+  // Position tileLayer so that world pixel c lands at screen centre + pan
+  var tx = Math.round(mapW/2 - c.x + mapState.panX);
+  var ty = Math.round(mapH/2 - c.y + mapState.panY);
+  tileLayer.style.transform = 'translate('+tx+'px,'+ty+'px)';
+
+  // Load any missing tiles now in view
+  var maxTile = Math.pow(2,z) - 1;
+  var rx = Math.ceil(mapW/TILE/2) + 2;
+  var ry = Math.ceil(mapH/TILE/2) + 2;
+  var cTx = Math.floor(c.x/TILE);
+  var cTy = Math.floor(c.y/TILE);
+  for(var dtx=cTx-rx; dtx<=cTx+rx; dtx++){
+    for(var dty=cTy-ry; dty<=cTy+ry; dty++){
+      if(dty<0||dty>maxTile) continue;
+      var wtx = ((dtx % Math.pow(2,z)) + Math.pow(2,z)) % Math.pow(2,z);
+      var key = z+'/'+wtx+'/'+dty;
+      if(tileCache[key]) continue;
+      tileCache[key] = true;
+      var img = document.createElement('img');
+      img.style.cssText = 'position:absolute;left:'+(dtx*TILE)+'px;top:'+(dty*TILE)+'px;width:'+TILE+'px;height:'+TILE+'px;display:block;';
+      var sub = ['a','b','c'][Math.abs(wtx+dty)%3];
+      img.src = 'https://'+sub+'.tile.openstreetmap.org/'+key+'.png';
+      img.alt = '';
+      tileLayer.appendChild(img);
+    }
+  }
+
+  // Redraw pins
+  drawPins();
+}
+
+function drawPins(){
+  while(pinLayer.firstChild) pinLayer.removeChild(pinLayer.firstChild);
+  var W=mapW, H=mapH;
 
   var defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
   var clip = document.createElementNS('http://www.w3.org/2000/svg','clipPath');
   clip.setAttribute('id','mapClip');
-  var clipRect = document.createElementNS('http://www.w3.org/2000/svg','rect');
-  clipRect.setAttribute('x','0'); clipRect.setAttribute('y','0');
-  clipRect.setAttribute('width', mapW); clipRect.setAttribute('height', mapH);
-  clip.appendChild(clipRect); defs.appendChild(clip); mapSvg.appendChild(defs);
+  var cr = document.createElementNS('http://www.w3.org/2000/svg','rect');
+  cr.setAttribute('x','0'); cr.setAttribute('y','0');
+  cr.setAttribute('width',W); cr.setAttribute('height',H);
+  clip.appendChild(cr); defs.appendChild(clip); pinLayer.appendChild(defs);
 
-  var pinGroup = document.createElementNS('http://www.w3.org/2000/svg','g');
-  pinGroup.setAttribute('clip-path','url(#mapClip)');
-  mapSvg.appendChild(pinGroup);
+  var g = document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.setAttribute('clip-path','url(#mapClip)');
+  pinLayer.appendChild(g);
 
-  var z = Math.round(mapState.zoom);
-  var W = mapW, H = mapH;
-  var ctX = toTileX(mapState.lng, z);
-  var ctY = toTileY(mapState.lat, z);
-  var tileOffX = W/2 - (gx(mapState.lng,z) - ctX*TILE) + mapState.panX;
-  var tileOffY = H/2 - (gy(mapState.lat,z) - ctY*TILE) + mapState.panY;
-  var rx = Math.ceil(W/TILE/2) + 2;
-  var ry = Math.ceil(H/TILE/2) + 2;
-
-  for(var dx=-rx; dx<=rx; dx++){
-    for(var dy=-ry; dy<=ry; dy++){
-      var tx = ctX+dx, ty = ctY+dy;
-      var px = Math.round(tileOffX + dx*TILE);
-      var py = Math.round(tileOffY + dy*TILE);
-      if(px+TILE<0||px>W||py+TILE<0||py>H) continue;
-      if(ty<0||ty>=Math.pow(2,z)) continue;
-      var img = document.createElement('img');
-      img.style.cssText='position:absolute;left:'+px+'px;top:'+py+'px;width:'+TILE+'px;height:'+TILE+'px;display:block;';
-      var sub=['a','b','c'][Math.abs(tx+ty)%3];
-      img.src='https://'+sub+'.tile.openstreetmap.org/'+z+'/'+tx+'/'+ty+'.png';
-      img.alt='';
-      mapTileDiv.appendChild(img);
-    }
-  }
-
-  var PIN_R = 14;
   var locations = CITIES[currentCity].locations;
   locations.forEach(function(loc){
     var p = latLngToScreen(loc.lat, loc.lng, W, H);
     var px=Math.round(p.px), py=Math.round(p.py);
-    if(px < -PIN_R || px > W+PIN_R || py < -PIN_R || py > H+PIN_R) return;
+    if(px<-20||px>W+20||py<-20||py>H+20) return;
     var isFound = foundSet.has(loc.id);
+
     var sh=document.createElementNS('http://www.w3.org/2000/svg','circle');
     sh.setAttribute('cx',px+2); sh.setAttribute('cy',py+2);
     sh.setAttribute('r','12'); sh.setAttribute('fill','#0d0d0d');
-    pinGroup.appendChild(sh);
+    g.appendChild(sh);
+
     var ci=document.createElementNS('http://www.w3.org/2000/svg','circle');
-    ci.setAttribute('cx',px); ci.setAttribute('cy',py);
-    ci.setAttribute('r','12');
-    ci.setAttribute('fill', isFound ? '#00C853' : '#e8192c');
-    ci.setAttribute('stroke','#0d0d0d');
-    ci.setAttribute('stroke-width','2');
-    pinGroup.appendChild(ci);
+    ci.setAttribute('cx',px); ci.setAttribute('cy',py); ci.setAttribute('r','12');
+    ci.setAttribute('fill', isFound?'#00C853':'#e8192c');
+    ci.setAttribute('stroke','#0d0d0d'); ci.setAttribute('stroke-width','2');
+    g.appendChild(ci);
+
     var num=document.createElementNS('http://www.w3.org/2000/svg','text');
     num.setAttribute('x',px); num.setAttribute('y',py+4);
     num.setAttribute('text-anchor','middle');
     num.setAttribute('font-family','Arial,sans-serif');
     num.setAttribute('font-size', loc.id>=10?'9':'11');
     num.setAttribute('font-weight','900');
-    num.setAttribute('fill', isFound ? '#0d0d0d' : '#FFE000');
-    num.textContent = isFound ? '✓' : loc.id;
-    pinGroup.appendChild(num);
+    num.setAttribute('fill', isFound?'#0d0d0d':'#FFE000');
+    num.textContent = isFound?'✓':loc.id;
+    g.appendChild(num);
   });
 }
 
 function setupPan(el){
   var dragging=false, lastX=0, lastY=0;
-  el.addEventListener('mousedown',function(e){ dragging=true; lastX=e.clientX; lastY=e.clientY; el.style.cursor='grabbing'; });
-  window.addEventListener('mousemove',function(e){ if(!dragging) return; mapState.panX+=e.clientX-lastX; mapState.panY+=e.clientY-lastY; lastX=e.clientX; lastY=e.clientY; redrawMap(); });
+
+  el.addEventListener('mousedown',function(e){
+    dragging=true; lastX=e.clientX; lastY=e.clientY; el.style.cursor='grabbing';
+  });
+  window.addEventListener('mousemove',function(e){
+    if(!dragging) return;
+    mapState.panX+=e.clientX-lastX; mapState.panY+=e.clientY-lastY;
+    lastX=e.clientX; lastY=e.clientY;
+    rafDraw();
+  });
   window.addEventListener('mouseup',function(){ dragging=false; el.style.cursor='grab'; });
 
-  var t1x=0,t1y=0,t2x=0,t2y=0,lastDist=0,touchCount=0,rafPending=false;
-  function scheduleRedraw(){ if(rafPending) return; rafPending=true; requestAnimationFrame(function(){ rafPending=false; redrawMap(); }); }
+  var t1x=0,t1y=0,t2x=0,t2y=0,lastDist=0,nTouch=0;
 
   el.addEventListener('touchstart',function(e){
-    e.preventDefault(); touchCount=e.touches.length;
+    e.preventDefault();
+    nTouch=e.touches.length;
     t1x=e.touches[0].clientX; t1y=e.touches[0].clientY;
-    if(touchCount>=2){ t2x=e.touches[1].clientX; t2y=e.touches[1].clientY; lastDist=Math.hypot(t2x-t1x,t2y-t1y); }
+    if(nTouch>=2){
+      t2x=e.touches[1].clientX; t2y=e.touches[1].clientY;
+      lastDist=Math.hypot(t2x-t1x,t2y-t1y);
+    }
   },{passive:false});
 
   el.addEventListener('touchmove',function(e){
-    e.preventDefault(); touchCount=e.touches.length;
-    if(touchCount===1){
+    e.preventDefault();
+    nTouch=e.touches.length;
+    if(nTouch===1){
       var nx=e.touches[0].clientX, ny=e.touches[0].clientY;
-      mapState.panX+=nx-t1x; mapState.panY+=ny-t1y; t1x=nx; t1y=ny; scheduleRedraw();
-    } else if(touchCount>=2){
-      var nx1=e.touches[0].clientX,ny1=e.touches[0].clientY;
-      var nx2=e.touches[1].clientX,ny2=e.touches[1].clientY;
+      mapState.panX+=nx-t1x; mapState.panY+=ny-t1y;
+      t1x=nx; t1y=ny;
+      rafDraw();
+    } else if(nTouch>=2){
+      var nx1=e.touches[0].clientX, ny1=e.touches[0].clientY;
+      var nx2=e.touches[1].clientX, ny2=e.touches[1].clientY;
       var newDist=Math.hypot(nx2-nx1,ny2-ny1);
+      // pan with midpoint
       var midX=(nx1+nx2)/2, midY=(ny1+ny2)/2;
-      var oldMidX=(t1x+t2x)/2, oldMidY=(t1y+t2y)/2;
-      mapState.panX+=midX-oldMidX; mapState.panY+=midY-oldMidY;
+      mapState.panX+=midX-(t1x+t2x)/2;
+      mapState.panY+=midY-(t1y+t2y)/2;
+      // zoom towards pinch centre
       if(lastDist>0 && newDist>0){
-        var newZoom=Math.min(17,Math.max(10,mapState.zoom+Math.log2(newDist/lastDist)));
+        var newZoom=Math.min(18,Math.max(10,mapState.zoom+Math.log2(newDist/lastDist)));
         var rect=el.getBoundingClientRect();
         var cx=midX-rect.left-mapW/2, cy=midY-rect.top-mapH/2;
         var scale=Math.pow(2,newZoom-mapState.zoom);
-        mapState.panX=cx+(mapState.panX-cx)*scale; mapState.panY=cy+(mapState.panY-cy)*scale;
+        mapState.panX=cx+(mapState.panX-cx)*scale;
+        mapState.panY=cy+(mapState.panY-cy)*scale;
         mapState.zoom=newZoom;
       }
-      t1x=nx1;t1y=ny1;t2x=nx2;t2y=ny2;lastDist=newDist; scheduleRedraw();
+      t1x=nx1; t1y=ny1; t2x=nx2; t2y=ny2; lastDist=newDist;
+      rafDraw();
     }
   },{passive:false});
 
   el.addEventListener('touchend',function(e){
-    touchCount=e.touches.length;
-    if(touchCount===1){ t1x=e.touches[0].clientX; t1y=e.touches[0].clientY; lastDist=0; }
+    nTouch=e.touches.length;
+    if(nTouch===1){ t1x=e.touches[0].clientX; t1y=e.touches[0].clientY; lastDist=0; }
+    // Snap zoom to nearest integer after pinch ends for crisp tiles
+    if(nTouch===0){
+      mapState.zoom=Math.round(mapState.zoom);
+      rafDraw();
+    }
   },{passive:false});
+
   el.style.cursor='grab';
 }
 
