@@ -588,6 +588,24 @@
     </div>
 
   </div>
+
+  <div style="width:100%;padding:24px 16px 0;">
+    <button onclick="confirmReset()" style="width:100%;padding:11px;background:transparent;border:2.5px dashed #ccc;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:900;font-size:0.82rem;color:#aaa;cursor:pointer;">
+      🔄 Reset all progress
+    </button>
+  </div>
+
+</div>
+
+<!-- RESET CONFIRM MODAL -->
+<div id="resetModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;padding:24px;">
+  <div style="background:#fff;border:3px solid #0d0d0d;border-radius:14px;padding:24px;max-width:320px;width:100%;box-shadow:6px 6px 0 #0d0d0d;text-align:center;">
+    <div style="font-size:2.5rem;margin-bottom:8px;">⚠️</div>
+    <div style="font-family:'Paytone One',sans-serif;font-size:1.2rem;color:#0d0d0d;margin-bottom:10px;">Reset everything?</div>
+    <div style="font-size:0.88rem;font-weight:700;color:#555;margin-bottom:20px;line-height:1.5;">This will wipe all found clues and points for both Dublin and Edinburgh. There's no undo!</div>
+    <button onclick="doReset()" style="width:100%;padding:12px;background:#e8192c;color:#fff;border:3px solid #0d0d0d;border-radius:8px;font-family:'Paytone One',sans-serif;font-size:1rem;cursor:pointer;box-shadow:3px 3px 0 #0d0d0d;margin-bottom:10px;">Yes, reset everything</button>
+    <button onclick="closeReset()" style="width:100%;padding:12px;background:#fff;color:#0d0d0d;border:3px solid #0d0d0d;border-radius:8px;font-family:'Paytone One',sans-serif;font-size:1rem;cursor:pointer;box-shadow:3px 3px 0 #0d0d0d;">Cancel</button>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════
@@ -787,6 +805,22 @@ function saveStorage() {
 // ════════════════════════════════════════════════════════════════
 //  HOME SCREEN
 // ════════════════════════════════════════════════════════════════
+function confirmReset() {
+  var m = document.getElementById('resetModal');
+  m.style.display = 'flex';
+}
+function closeReset() {
+  document.getElementById('resetModal').style.display = 'none';
+}
+function doReset() {
+  Object.keys(CITIES).forEach(function(city) {
+    localStorage.removeItem('spotted-'+city+'-found');
+    localStorage.removeItem('spotted-'+city+'-score');
+  });
+  closeReset();
+  updateHomeBadges();
+}
+
 function updateHomeBadges() {
   ['dublin','edinburgh'].forEach(city => {
     const data = getStorage(city);
