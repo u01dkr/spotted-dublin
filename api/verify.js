@@ -1,5 +1,4 @@
 export default async function handler(req, res) {
-  // Only allow POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -10,6 +9,10 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
+  const parts = visionPrompt.split(' | JUDGING RULES: ');
+  const whatToLookFor = parts[0].replace('WHAT TO LOOK FOR: ', '').trim();
+  const systemPrompt = parts[1] || `You are a generous and encouraging judge for a family treasure hunt game. Your default is to ACCEPT the photo. Only reject if the photo is completely and obviously wrong — e.g. a blank wall, a random sky, someone's feet, or clearly nothing relevant at all. If there is any reasonable chance the photo matches the description, say found=true. Reply ONLY with valid JSON, no markdown: {"found": true or false, "message": "A warm fun line for a child, max 12 words."}`;
+
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -19,9 +22,9 @@ export default async function handler(req, res) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
+        model: 'claude-sonnet-4-5-20251001',
         max_tokens: 150,
-        system: visionPrompt,
+        system: systemPrompt,
         messages: [{
           role: 'user',
           content: [
@@ -35,7 +38,7 @@ export default async function handler(req, res) {
             },
             {
               type: 'text',
-              text: 'Check this photo. Reply JSON only.'
+              text: `Does this photo show: ${whatToLookFor}\n\nReply with JSON only.`
             }
           ]
         }]
